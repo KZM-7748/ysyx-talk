@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>一生一芯 · 高校宣讲会</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: #0b0f1a;
+    color: #e5e7eb;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 640px; margin: 0 auto; padding: 0 24px; }
+
+  /* ===== Hero ===== */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: 48px;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: url('assets/hero-chip.jpg') center/cover no-repeat;
+    z-index: 0;
+  }
+  .hero::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(11,15,26,0.3) 0%, rgba(11,15,26,0.6) 50%, #0b0f1a 100%);
+    z-index: 1;
+  }
+  .hero-content { position: relative; z-index: 2; }
+  .badge {
+    display: inline-block;
+    padding: 6px 16px;
+    border: 1px solid #2dd4bf;
+    border-radius: 999px;
+    color: #2dd4bf;
+    font-size: 13px;
+    margin-bottom: 24px;
+    letter-spacing: 1px;
+  }
+  .hero h1 {
+    font-size: 56px;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 16px;
+    letter-spacing: 2px;
+  }
+  .hero h1 .green { color: #2dd4bf; }
+  .hero .subtitle {
+    font-size: 18px;
+    color: #9ca3af;
+    margin-bottom: 32px;
+    line-height: 1.6;
+  }
+  .date-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(45,212,191,0.08);
+    border: 1px solid rgba(45,212,191,0.2);
+    border-radius: 12px;
+    padding: 16px 20px;
+    color: #2dd4bf;
+    font-size: 16px;
+    font-weight: 500;
+  }
+  .scroll-hint {
+    text-align: center;
+    color: #6b7280;
+    font-size: 14px;
+    margin-top: 40px;
+  }
+
+  /* ===== Sections ===== */
+  section { padding: 56px 0; }
+  .label {
+    color: #2dd4bf;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+  h2 {
+    font-size: 36px;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 16px;
+    line-height: 1.2;
+  }
+  .accent-line {
+    width: 40px; height: 3px;
+    background: #2dd4bf;
+    border-radius: 2px;
+    margin-bottom: 24px;
+  }
+  .lead {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.5;
+    margin-bottom: 20px;
+  }
+  .lead .green { color: #2dd4bf; }
+  .body-text {
+    color: #9ca3af;
+    font-size: 16px;
+    line-height: 1.8;
+  }
+
+  /* ===== Stages ===== */
+  .stages {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    margin-top: 32px;
+  }
+  .stage { display: flex; gap: 16px; align-items: flex-start; }
+  .stage-num {
+    flex-shrink: 0;
+    width: 44px; height: 44px;
+    border: 2px solid #2dd4bf;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: #2dd4bf;
+    font-weight: 700;
+    font-size: 18px;
+  }
+  .stage h3 { color: #fff; font-size: 18px; margin-bottom: 6px; }
+  .stage p { color: #9ca3af; font-size: 15px; line-height: 1.6; }
+
+  /* ===== Gain Cards ===== */
+  .cards {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 32px;
+  }
+  .card {
+    background: #111827;
+    border: 1px solid #1f2937;
+    border-radius: 16px;
+    padding: 24px;
+  }
+  .card .icon {
+    width: 40px; height: 40px;
+    color: #2dd4bf;
+    margin-bottom: 16px;
+  }
+  .card h3 { color: #fff; font-size: 18px; margin-bottom: 10px; }
+  .card p { color: #9ca3af; font-size: 15px; line-height: 1.7; }
+  .card .expand {
+    color: #2dd4bf;
+    font-size: 14px;
+    margin-top: 12px;
+    cursor: pointer;
+    display: inline-block;
+  }
+
+  /* ===== Who ===== */
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 28px;
+  }
+  .tag {
+    background: rgba(45,212,191,0.08);
+    border: 1px solid rgba(45,212,191,0.25);
+    border-radius: 10px;
+    padding: 12px 18px;
+    text-align: center;
+    flex: 1;
+    min-width: 140px;
+  }
+  .tag .t1 { color: #fff; font-weight: 700; font-size: 16px; display: block; margin-bottom: 4px; }
+  .tag .t2 { color: #6b7280; font-size: 13px; }
+
+  /* ===== Event Info ===== */
+  .event-card {
+    background: linear-gradient(135deg, #1a2e2a 0%, #1a2332 100%);
+    border: 1px solid rgba(45,212,191,0.15);
+    border-radius: 16px;
+    padding: 28px;
+    margin-top: 28px;
+  }
+  .event-row { display: flex; gap: 24px; flex-wrap: wrap; }
+  .event-time .small { color: #6b7280; font-size: 13px; margin-bottom: 4px; }
+  .event-time .date { color: #fff; font-size: 18px; font-weight: 600; }
+  .event-time .time { color: #2dd4bf; font-size: 28px; font-weight: 800; }
+  .event-loc { margin-left: auto; }
+  .event-loc .small { color: #6b7280; font-size: 13px; margin-bottom: 4px; }
+  .event-loc .loc-val {
+    background: rgba(255,255,255,0.06);
+    border-radius: 8px;
+    padding: 10px 16px;
+    color: #d1d5db;
+    font-size: 14px;
+  }
+  .countdown {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 32px;
+  }
+  .cd-item {
+    background: #111827;
+    border: 1px solid #1f2937;
+    border-radius: 12px;
+    padding: 16px 12px;
+    text-align: center;
+    min-width: 64px;
+  }
+  .cd-item .num { color: #2dd4bf; font-size: 28px; font-weight: 800; }
+  .cd-item .unit { color: #6b7280; font-size: 13px; margin-top: 4px; }
+
+  /* ===== QR Section ===== */
+  .qr-card {
+    background: #111827;
+    border: 1px solid #1f2937;
+    border-radius: 16px;
+    padding: 32px 24px;
+    margin-top: 28px;
+    text-align: center;
+  }
+  .qr-img {
+    width: 200px; height: 200px;
+    border-radius: 12px;
+    margin: 0 auto 16px;
+    display: block;
+  }
+  .qr-title { color: #fff; font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+  .qr-sub { color: #6b7280; font-size: 14px; margin-bottom: 20px; }
+  .note {
+    background: rgba(245,158,11,0.08);
+    border-radius: 10px;
+    padding: 16px;
+    color: #d1d5db;
+    font-size: 14px;
+    line-height: 1.7;
+    text-align: left;
+    margin-bottom: 20px;
+  }
+  .note .hl { color: #fbbf24; font-weight: 600; }
+  .sign-img {
+    width: 100%;
+    border-radius: 10px;
+    margin-top: 8px;
+  }
+  .sign-caption { color: #6b7280; font-size: 13px; margin-top: 12px; }
+
+  /* ===== Footer ===== */
+  footer {
+    text-align: center;
+    padding: 48px 24px;
+    border-top: 1px solid #1f2937;
+    margin-top: 24px;
+  }
+  footer .f1 { color: #9ca3af; font-size: 15px; margin-bottom: 8px; }
+  footer .f2 { color: #2dd4bf; font-size: 15px; margin-bottom: 8px; }
+  footer .f3 { color: #6b7280; font-size: 14px; }
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content container">
+    <span class="badge">高校公益宣讲</span>
+    <h1>一生<span class="green">一芯</span></h1>
+    <p class="subtitle">从零开始，亲手设计一颗<br>属于你自己的 RISC-V 处理器</p>
+    <div class="date-box">
+      <span>🗓</span>
+      <span>2026年10月17日 14:00 — 16:00</span>
+    </div>
+    <p class="scroll-hint">向下滑动了解更多</p>
+  </div>
+</div>
+
+<!-- 关于项目 -->
+<section>
+  <div class="container">
+    <div class="label">关于项目</div>
+    <h2>这是什么？</h2>
+    <div class="accent-line"></div>
+    <p class="lead">一场<span class="green">完全免费</span>的芯片设计之旅，<br>从代码开始，到一颗真正的芯片结束。</p>
+    <p class="body-text">一生一芯是由中国科学院大学发起的公益性芯片培养项目。不需要你有深厚的专业背景，只要你对"计算机到底是怎么跑起来的"感到好奇，就能在这里找到答案。</p>
+  </div>
+</section>
+
+<!-- 学习路径 -->
+<section>
+  <div class="container">
+    <div class="label">学习路径</div>
+    <h2>你会经历什么</h2>
+    <div class="accent-line"></div>
+    <p class="body-text" style="margin-bottom:8px;">三个阶段，一步步从理论走向实物。</p>
+    <div class="stages">
+      <div class="stage">
+        <div class="stage-num">1</div>
+        <div>
+          <h3>CPU 设计</h3>
+          <p>用 Verilog 从零写出一个能跑程序的处理器核心</p>
+        </div>
+      </div>
+      <div class="stage">
+        <div class="stage-num">2</div>
+        <div>
+          <h3>操作系统</h3>
+          <p>在你自己设计的 CPU 上，跑起一个操作系统</p>
+        </div>
+      </div>
+      <div class="stage">
+        <div class="stage-num">3</div>
+        <div>
+          <h3>芯片版图与流片</h3>
+          <p>完成物理版图设计，最终把你的芯片送到工厂流片</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 你将收获 -->
+<section>
+  <div class="container">
+    <div class="label">你将收获</div>
+    <h2>能做到这些</h2>
+    <div class="accent-line"></div>
+    <div class="cards">
+      <div class="card">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="6,4 20,12 6,20" fill="currentColor"/></svg>
+        <h3>让你的芯片跑起超级玛丽</h3>
+        <p>在自己设计的处理器上运行经典游戏，这不是模拟器，是你亲手写的芯片在跑。从 Verilog 代码开始，搭建流水线、实现指令集，最终在 FPGA 上验证你的 CPU 能加载并运行 NES 游戏。</p>
+      </div>
+      <div class="card">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/></svg>
+        <h3>拿到一颗真实的芯片</h3>
+        <p>优秀学员将参与流片，把你的设计变成物理实物，拿在手里。完成从 RTL 到 GDSII 的全流程，通过 DRC/LVS 验证后提交到台积电或中芯国际流片，几个月后你会收到一颗刻着你名字的芯片。</p>
+      </div>
+      <div class="card">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M15.5 13.5 17 22l-5-3-5 3 1.5-8.5"/></svg>
+        <h3>官方认证与学习证明</h3>
+        <p>完成学习路径的学员将获得项目官方认证，为你的简历添上硬核一笔。由中国科学院大学颁发的结课证明，以及在 RISC-V 生态中的社区认可。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 谁可以来 -->
+<section>
+  <div class="container">
+    <div class="label">谁可以来</div>
+    <h2>不设门槛</h2>
+    <div class="accent-line"></div>
+    <div class="tags">
+      <div class="tag">
+        <span class="t1">不限专业</span>
+        <span class="t2">文理科都欢迎</span>
+      </div>
+      <div class="tag">
+        <span class="t1">不限年级</span>
+        <span class="t2">大一到研三</span>
+      </div>
+      <div class="tag">
+        <span class="t1">完全免费</span>
+        <span class="t2">公益项目</span>
+      </div>
+    </div>
+    <p class="body-text" style="margin-top:28px;">只要你对计算机底层有好奇心，就足够了。</p>
+  </div>
+</section>
+
+<!-- 宣讲会信息 -->
+<section>
+  <div class="container">
+    <div class="label">宣讲会信息</div>
+    <h2>活动详情</h2>
+    <div class="accent-line"></div>
+    <div class="event-card">
+      <div class="event-row">
+        <div class="event-time">
+          <div class="small">时间</div>
+          <div class="date">2026年10月17日</div>
+          <div class="time">14:00 — 16:00</div>
+        </div>
+        <div class="event-loc">
+          <div class="small">地点</div>
+          <div class="loc-val">【教室待通知，请关注群内消息】</div>
+        </div>
+      </div>
+    </div>
+    <div class="countdown" id="countdown">
+      <div class="cd-item"><div class="num" id="cd-d">--</div><div class="unit">天</div></div>
+      <div class="cd-item"><div class="num" id="cd-h">--</div><div class="unit">时</div></div>
+      <div class="cd-item"><div class="num" id="cd-m">--</div><div class="unit">分</div></div>
+      <div class="cd-item"><div class="num" id="cd-s">--</div><div class="unit">秒</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 参与方式 -->
+<section>
+  <div class="container">
+    <div class="label">参与方式</div>
+    <h2>提前了解一下</h2>
+    <div class="accent-line"></div>
+    <p class="body-text" style="margin-bottom:8px;">扫描下方二维码，提前填写你的基本信息。活动当天我们会现场签到，在纸质表上完成手写签名。</p>
+    <div class="qr-card">
+      <img class="qr-img" src="assets/qr-code.png" alt="报名二维码">
+      <div class="qr-title">扫码填写信息</div>
+      <div class="qr-sub">姓名 · 单位 · 联系方式</div>
+      <div class="note">
+        <span class="hl">说明：</span>扫码后只需填写前三行基本信息（姓名、单位、联系方式），<span class="hl">签名一栏当天现场手写即可</span>。提前填写能帮我们更快完成签到，不用现场排队填表。
+      </div>
+      <img class="sign-img" src="assets/sign-sheet.png" alt="签领表示例">
+      <p class="sign-caption">这是当天使用的签领表样式，提前填好前三列，到场后直接在"签字"栏签名就行。</p>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <p class="f1">一生一芯 · 高校宣讲会</p>
+  <p class="f2">官网：ysyx.org</p>
+  <p class="f3">期待与你见面</p>
+</footer>
+
+<script>
+(function(){
+  var target = new Date('2026-10-17T14:00:00+08:00').getTime();
+  function pad(n){ return n < 10 ? '0'+n : ''+n; }
+  function tick(){
+    var now = Date.now();
+    var diff = target - now;
+    if (diff < 0) diff = 0;
+    var d = Math.floor(diff / 86400000);
+    var h = Math.floor((diff % 86400000) / 3600000);
+    var m = Math.floor((diff % 3600000) / 60000);
+    var s = Math.floor((diff % 60000) / 1000);
+    document.getElementById('cd-d').textContent = d;
+    document.getElementById('cd-h').textContent = pad(h);
+    document.getElementById('cd-m').textContent = pad(m);
+    document.getElementById('cd-s').textContent = pad(s);
+  }
+  tick();
+  setInterval(tick, 1000);
+})();
+</script>
+
+</body>
+</html>
