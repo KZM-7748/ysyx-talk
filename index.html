@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <title>一生一芯 · 高校宣讲会</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -14,6 +15,9 @@
     -webkit-font-smoothing: antialiased;
   }
   .container { max-width: 640px; margin: 0 auto; padding: 0 24px; }
+
+  /* ===== 配色变量 ===== */
+  /* 主色 teal: #2dd4bf  辅色 blue: #60a5fa  紫色: #a78bfa  琥珀: #fbbf24 */
 
   /* ===== Hero ===== */
   .hero {
@@ -33,7 +37,7 @@
   .hero::after {
     content: '';
     position: absolute; inset: 0;
-    background: linear-gradient(180deg, rgba(11,15,26,0.3) 0%, rgba(11,15,26,0.6) 50%, #0b0f1a 100%);
+    background: linear-gradient(180deg, rgba(11,15,26,0.2) 0%, rgba(11,15,26,0.5) 40%, #0b0f1a 100%);
     z-index: 1;
   }
   .hero-content { position: relative; z-index: 2; }
@@ -61,7 +65,7 @@
     margin-bottom: 32px;
     line-height: 1.6;
   }
-  .date-box {
+  .date-box, .loc-box {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -73,19 +77,7 @@
     font-size: 16px;
     font-weight: 500;
   }
-  .loc-box {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: rgba(45,212,191,0.08);
-    border: 1px solid rgba(45,212,191,0.2);
-    border-radius: 12px;
-    padding: 16px 20px;
-    color: #2dd4bf;
-    font-size: 16px;
-    font-weight: 500;
-    margin-top: 12px;
-  }
+  .loc-box { margin-top: 12px; }
   .scroll-hint {
     text-align: center;
     color: #6b7280;
@@ -93,64 +85,158 @@
     margin-top: 40px;
   }
 
-  /* ===== Sections ===== */
-  section { padding: 56px 0; }
+  /* ===== Sections 通用 ===== */
+  section { padding: 56px 0; position: relative; }
+  section:nth-child(even) {
+    background: linear-gradient(180deg, transparent 0%, rgba(45,212,191,0.02) 50%, transparent 100%);
+  }
   .label {
-    color: #2dd4bf;
     font-size: 14px;
     font-weight: 600;
     letter-spacing: 1px;
     margin-bottom: 12px;
   }
+  .label.teal { color: #2dd4bf; }
+  .label.blue { color: #60a5fa; }
+  .label.purple { color: #a78bfa; }
+  .label.amber { color: #fbbf24; }
   h2 {
-    font-size: 36px;
+    font-size: 32px;
     font-weight: 800;
     color: #fff;
     margin-bottom: 16px;
-    line-height: 1.2;
+    line-height: 1.25;
   }
   .accent-line {
     width: 40px; height: 3px;
-    background: #2dd4bf;
     border-radius: 2px;
     margin-bottom: 24px;
   }
+  .accent-line.teal { background: #2dd4bf; }
+  .accent-line.blue { background: #60a5fa; }
+  .accent-line.purple { background: #a78bfa; }
+  .accent-line.amber { background: #fbbf24; }
   .lead {
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 700;
     color: #fff;
     line-height: 1.5;
     margin-bottom: 20px;
   }
-  .lead .green { color: #2dd4bf; }
+  .lead .hl-teal { color: #2dd4bf; }
+  .lead .hl-blue { color: #60a5fa; }
   .body-text {
     color: #9ca3af;
     font-size: 16px;
     line-height: 1.8;
   }
 
-  /* ===== Stages ===== */
+  /* ===== Stats ===== */
+  .stats-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 32px;
+    flex-wrap: wrap;
+  }
+  .stat-item {
+    flex: 1;
+    min-width: 90px;
+    background: rgba(45,212,191,0.06);
+    border: 1px solid rgba(45,212,191,0.15);
+    border-radius: 12px;
+    padding: 24px 12px;
+    text-align: center;
+  }
+  .stat-item.blue {
+    background: rgba(96,165,250,0.06);
+    border-color: rgba(96,165,250,0.15);
+  }
+  .stat-item.purple {
+    background: rgba(167,139,250,0.06);
+    border-color: rgba(167,139,250,0.15);
+  }
+  .stat-num {
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+  .stat-item.teal .stat-num { color: #2dd4bf; }
+  .stat-item.blue .stat-num { color: #60a5fa; }
+  .stat-item.purple .stat-num { color: #a78bfa; }
+  .stat-label {
+    font-size: 13px;
+    color: #9ca3af;
+    margin-top: 8px;
+  }
+
+  /* ===== 全栈流程图 ===== */
+  .pipeline-img {
+    width: 100%;
+    border-radius: 12px;
+    margin-top: 24px;
+    border: 1px solid #1f2937;
+  }
+  .pipeline-caption {
+    color: #6b7280;
+    font-size: 13px;
+    margin-top: 12px;
+    text-align: center;
+  }
+
+  /* ===== 学习路径（三步） ===== */
   .stages {
     display: flex;
     flex-direction: column;
-    gap: 32px;
+    gap: 24px;
     margin-top: 32px;
   }
   .stage { display: flex; gap: 16px; align-items: flex-start; }
   .stage-num {
     flex-shrink: 0;
     width: 44px; height: 44px;
-    border: 2px solid #2dd4bf;
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    color: #2dd4bf;
     font-weight: 700;
     font-size: 18px;
   }
+  .stage:nth-child(1) .stage-num { border: 2px solid #2dd4bf; color: #2dd4bf; }
+  .stage:nth-child(2) .stage-num { border: 2px solid #60a5fa; color: #60a5fa; }
+  .stage:nth-child(3) .stage-num { border: 2px solid #a78bfa; color: #a78bfa; }
   .stage h3 { color: #fff; font-size: 18px; margin-bottom: 6px; }
   .stage p { color: #9ca3af; font-size: 15px; line-height: 1.6; }
 
-  /* ===== Gain Cards ===== */
+  /* ===== 阶段课程表 ===== */
+  .stages-img {
+    width: 100%;
+    border-radius: 12px;
+    margin-top: 24px;
+    border: 1px solid #1f2937;
+  }
+
+  /* ===== 开放资源 ===== */
+  .resource-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 24px;
+  }
+  .resource-card {
+    background: rgba(96,165,250,0.05);
+    border: 1px solid rgba(96,165,250,0.15);
+    border-radius: 12px;
+    padding: 18px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .resource-icon {
+    font-size: 28px;
+    flex-shrink: 0;
+  }
+  .resource-info h3 { color: #fff; font-size: 15px; margin-bottom: 2px; }
+  .resource-info p { color: #6b7280; font-size: 13px; }
+
+  /* ===== 你将收获 卡片 ===== */
   .cards {
     display: flex;
     flex-direction: column;
@@ -163,22 +249,28 @@
     border-radius: 16px;
     padding: 24px;
   }
-  .card .icon {
-    width: 40px; height: 40px;
-    color: #2dd4bf;
-    margin-bottom: 16px;
-  }
   .card h3 { color: #fff; font-size: 18px; margin-bottom: 10px; }
   .card p { color: #9ca3af; font-size: 15px; line-height: 1.7; }
-  .card .expand {
-    color: #2dd4bf;
-    font-size: 14px;
-    margin-top: 12px;
-    cursor: pointer;
+  .card .card-tag {
     display: inline-block;
+    font-size: 12px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    margin-bottom: 12px;
+  }
+  .card:nth-child(1) .card-tag { background: rgba(45,212,191,0.12); color: #2dd4bf; }
+  .card:nth-child(2) .card-tag { background: rgba(96,165,250,0.12); color: #60a5fa; }
+  .card:nth-child(3) .card-tag { background: rgba(167,139,250,0.12); color: #a78bfa; }
+
+  /* ===== 毕业收获图 ===== */
+  .grad-img {
+    width: 100%;
+    border-radius: 12px;
+    margin-top: 24px;
+    border: 1px solid #1f2937;
   }
 
-  /* ===== Who ===== */
+  /* ===== 谁可以来 ===== */
   .tags {
     display: flex;
     flex-wrap: wrap;
@@ -189,7 +281,7 @@
     background: rgba(45,212,191,0.08);
     border: 1px solid rgba(45,212,191,0.25);
     border-radius: 10px;
-    padding: 12px 18px;
+    padding: 14px 18px;
     text-align: center;
     flex: 1;
     min-width: 140px;
@@ -197,7 +289,7 @@
   .tag .t1 { color: #fff; font-weight: 700; font-size: 16px; display: block; margin-bottom: 4px; }
   .tag .t2 { color: #6b7280; font-size: 13px; }
 
-  /* ===== Event Info ===== */
+  /* ===== 活动详情 ===== */
   .event-card {
     background: linear-gradient(135deg, #1a2e2a 0%, #1a2332 100%);
     border: 1px solid rgba(45,212,191,0.15);
@@ -221,21 +313,21 @@
   .countdown {
     display: flex;
     justify-content: center;
-    gap: 16px;
+    gap: 12px;
     margin-top: 32px;
   }
   .cd-item {
     background: #111827;
     border: 1px solid #1f2937;
     border-radius: 12px;
-    padding: 16px 12px;
+    padding: 16px 10px;
     text-align: center;
-    min-width: 64px;
+    min-width: 60px;
   }
-  .cd-item .num { color: #2dd4bf; font-size: 28px; font-weight: 800; }
+  .cd-item .num { color: #2dd4bf; font-size: 26px; font-weight: 800; }
   .cd-item .unit { color: #6b7280; font-size: 13px; margin-top: 4px; }
 
-  /* ===== QR Section ===== */
+  /* ===== 报名二维码 ===== */
   .qr-card {
     background: #111827;
     border: 1px solid #1f2937;
@@ -253,7 +345,7 @@
   .qr-title { color: #fff; font-size: 18px; font-weight: 700; margin-bottom: 6px; }
   .qr-sub { color: #6b7280; font-size: 14px; margin-bottom: 20px; }
   .note {
-    background: rgba(245,158,11,0.08);
+    background: rgba(251,191,36,0.08);
     border-radius: 10px;
     padding: 16px;
     color: #d1d5db;
@@ -270,42 +362,7 @@
   }
   .sign-caption { color: #6b7280; font-size: 13px; margin-top: 12px; }
 
-  /* ===== Stats ===== */
-  .stats-row {
-    display: flex;
-    gap: 16px;
-    margin-top: 32px;
-    flex-wrap: wrap;
-  }
-  .stat-item {
-    flex: 1;
-    min-width: 100px;
-    background: rgba(45,212,191,0.06);
-    border: 1px solid rgba(45,212,191,0.15);
-    border-radius: 12px;
-    padding: 24px 16px;
-    text-align: center;
-  }
-  .stat-num {
-    font-size: 28px;
-    font-weight: 700;
-    color: #2dd4bf;
-    line-height: 1.2;
-  }
-  .stat-label {
-    font-size: 13px;
-    color: #9ca3af;
-    margin-top: 8px;
-  }
-
-  /* ===== Graduation image ===== */
-  .grad-img {
-    width: 100%;
-    border-radius: 12px;
-    margin-top: 24px;
-  }
-
-  /* ===== Links card ===== */
+  /* ===== 联系我们 ===== */
   .links-card {
     background: rgba(255,255,255,0.03);
     border: 1px solid #1f2937;
@@ -320,12 +377,9 @@
     flex-wrap: wrap;
     margin-bottom: 24px;
   }
-  .link-qr-item {
-    text-align: center;
-  }
+  .link-qr-item { text-align: center; }
   .link-qr-img {
-    width: 120px;
-    height: 120px;
+    width: 120px; height: 120px;
     border-radius: 8px;
     background: #fff;
     padding: 6px;
@@ -341,6 +395,7 @@
     font-size: 15px;
     line-height: 2;
   }
+  .link-info a { color: #2dd4bf; text-decoration: none; }
 
   /* ===== Footer ===== */
   footer {
@@ -356,8 +411,8 @@
 </head>
 <body>
 
-<!-- Hero -->
-<div class="hero">
+<!-- ========== Hero ========== -->
+<div class="hero" id="hero">
   <div class="hero-bg"></div>
   <div class="hero-content container">
     <span class="badge">高校公益宣讲</span>
@@ -375,117 +430,164 @@
   </div>
 </div>
 
-<!-- 关于项目 -->
-<section>
+<!-- ========== 关于项目 ========== -->
+<section id="about">
   <div class="container">
-    <div class="label">关于项目</div>
+    <div class="label teal">关于项目</div>
     <h2>这是什么？</h2>
-    <div class="accent-line"></div>
-    <p class="lead">一场<span class="green">完全免费</span>的芯片设计之旅，<br>从代码开始，到一颗真正的芯片结束。</p>
-    <p class="body-text">一生一芯是由中国科学院大学联合中国科学院计算技术研究所，于2019年启动的公益性芯片培养项目，对标国际MOSIS项目。不需要你有深厚的专业背景，只要你对"计算机到底是怎么跑起来的"感到好奇，就能在这里找到答案。</p>
+    <div class="accent-line teal"></div>
+    <p class="lead">一场<span class="hl-teal">完全免费</span>的芯片设计之旅，<br>从代码开始，到一颗真正的芯片结束。</p>
+    <p class="body-text">"一生一芯"是2019年由中国科学院大学联合中科院计算技术研究所启动的公益性芯片培养项目，对标国际 MOSIS 项目。不需要你有深厚的专业背景——只要你对"计算机到底是怎么跑起来的"感到好奇，就能在这里找到答案。</p>
   </div>
 </section>
 
-<!-- 项目规模 -->
-<section>
+<!-- ========== 项目规模 ========== -->
+<section id="scale">
   <div class="container">
-    <div class="label">项目规模</div>
+    <div class="label blue">项目规模</div>
     <h2>全国规模最大的芯片人才社区</h2>
-    <div class="accent-line"></div>
+    <div class="accent-line blue"></div>
     <div class="stats-row">
-      <div class="stat-item">
+      <div class="stat-item teal">
         <div class="stat-num">20000+</div>
         <div class="stat-label">累计报名人数</div>
       </div>
-      <div class="stat-item">
+      <div class="stat-item blue">
         <div class="stat-num">1300+</div>
         <div class="stat-label">覆盖全球学校</div>
       </div>
-      <div class="stat-item">
+      <div class="stat-item purple">
         <div class="stat-num">近2000</div>
         <div class="stat-label">培养学生人数</div>
       </div>
     </div>
-    <p class="body-text" style="margin-top:24px;">项目用"开源开放、独立解决问题、软硬件全栈、芯片全链条"的理念培养人才，学员毕业后输送到国内芯片企业或高校课题组，攻关卡脖子领域。</p>
+    <p class="body-text" style="margin-top:24px;">项目用"开源开放、独立解决问题、软硬件全栈、芯片全链条"的理念培养人才。学员毕业后进入国内芯片企业或高校课题组，投身处理器芯片、计算机系统、系统软件等方向，攻关卡脖子领域。</p>
   </div>
 </section>
 
-<!-- 学习路径 -->
-<section>
+<!-- ========== 全栈流程 ========== -->
+<section id="pipeline">
   <div class="container">
-    <div class="label">学习路径</div>
+    <div class="label purple">全栈流程</div>
+    <h2>从软件到芯片，一条完整链路</h2>
+    <div class="accent-line purple"></div>
+    <p class="body-text">这不是只学写代码，也不是只学画版图。你会经历从 IP 设计、SoC 集成、EDA 工具，到掩模制造、再到基础软件适配和应用开发的完整链条。</p>
+    <img class="pipeline-img" src="assets/pipeline.png" alt="处理器芯片及其基础软件全链路">
+    <p class="pipeline-caption">芯片设计 → 芯片制造 → 软件开发，前后端全链条贯通</p>
+  </div>
+</section>
+
+<!-- ========== 学习路径 ========== -->
+<section id="path">
+  <div class="container">
+    <div class="label teal">学习路径</div>
     <h2>你会经历什么</h2>
-    <div class="accent-line"></div>
+    <div class="accent-line teal"></div>
     <p class="body-text" style="margin-bottom:8px;">三个阶段，一步步从理论走向实物。</p>
     <div class="stages">
       <div class="stage">
         <div class="stage-num">1</div>
         <div>
           <h3>CPU 设计</h3>
-          <p>用 Verilog 从零写出一个能跑程序的处理器核心</p>
+          <p>用 Verilog 从零写出一个能跑程序的处理器核心，从3条指令的数列求和开始</p>
         </div>
       </div>
       <div class="stage">
         <div class="stage-num">2</div>
         <div>
           <h3>操作系统</h3>
-          <p>在你自己设计的 CPU 上，跑起一个操作系统</p>
+          <p>在你自己设计的 CPU 上跑起 RT-Thread、Linux，让芯片真正有用</p>
         </div>
       </div>
       <div class="stage">
         <div class="stage-num">3</div>
         <div>
           <h3>芯片版图与流片</h3>
-          <p>完成物理版图设计，最终把你的芯片送到工厂流片</p>
+          <p>完成物理版图设计，提交工厂流片，把你的设计变成拿在手里的芯片</p>
+        </div>
+      </div>
+    </div>
+    <img class="stages-img" src="assets/stages.png" alt="阶段划分课程表">
+    <p class="pipeline-caption">从 F 阶段（数列求和）到 S 阶段（乱序超标量），覆盖大一上到研究生</p>
+  </div>
+</section>
+
+<!-- ========== 开放资源 ========== -->
+<section id="resources">
+  <div class="container">
+    <div class="label blue">开放资源</div>
+    <h2>学习资源全部开放</h2>
+    <div class="accent-line blue"></div>
+    <p class="body-text">不需要报名才能看资料。课程讲义、代码、视频全部公开，随到随学。</p>
+    <div class="resource-cards">
+      <div class="resource-card">
+        <div class="resource-icon">📺</div>
+        <div class="resource-info">
+          <h3>B站视频教程</h3>
+          <p>搜索"一生一芯"，教学视频时长 40+ 小时</p>
+        </div>
+      </div>
+      <div class="resource-card">
+        <div class="resource-icon">📖</div>
+        <div class="resource-info">
+          <h3>在线课程文档</h3>
+          <p>ysyx.org/docs/，讲义 42 万字，课件 1000+ 页</p>
+        </div>
+      </div>
+      <div class="resource-card">
+        <div class="resource-icon">💻</div>
+        <div class="resource-info">
+          <h3>代码全部开源</h3>
+          <p>课件讲解 + 代码演示 + 完整工程仓库</p>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- 你将收获 -->
-<section>
+<!-- ========== 你将收获 ========== -->
+<section id="gains">
   <div class="container">
-    <div class="label">你将收获</div>
+    <div class="label purple">你将收获</div>
     <h2>能做到这些</h2>
-    <div class="accent-line"></div>
+    <div class="accent-line purple"></div>
     <div class="cards">
       <div class="card">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="6,4 20,12 6,20" fill="currentColor"/></svg>
+        <span class="card-tag">跑起来</span>
         <h3>让你的芯片跑起超级玛丽</h3>
-        <p>在自己设计的处理器上运行经典游戏，这不是模拟器，是你亲手写的芯片在跑。从 Verilog 代码开始，搭建流水线、实现指令集，最终在 FPGA 上验证你的 CPU 能加载并运行 NES 游戏。</p>
+        <p>在自己设计的处理器上运行经典游戏。从 Verilog 代码开始，搭建流水线、实现指令集，最终在 FPGA 上验证你的 CPU 能加载并运行 NES 游戏。</p>
       </div>
       <div class="card">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/></svg>
+        <span class="card-tag">流片</span>
         <h3>拿到一颗真实的芯片</h3>
-        <p>优秀学员将参与流片，把你的设计变成物理实物，拿在手里。完成从 RTL 到 GDSII 的全流程，通过 DRC/LVS 验证后提交到台积电或中芯国际流片，几个月后你会收到一颗刻着你名字的芯片。</p>
+        <p>优秀学员将参与流片，把你的设计变成物理实物拿在手里。完成从 RTL 到 GDSII 的全流程，几个月后收到一颗刻着你名字的芯片。</p>
       </div>
       <div class="card">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M15.5 13.5 17 22l-5-3-5 3 1.5-8.5"/></svg>
+        <span class="card-tag">认证</span>
         <h3>官方认证与学习证明</h3>
-        <p>完成学习路径的学员将获得项目官方认证，为你的简历添上硬核一笔。由"一生一芯"项目组颁发的结课证明，以及在 RISC-V 生态中的社区认可。</p>
+        <p>完成学习路径的学员将获得由"一生一芯"项目组颁发的等级认证证书，包含能力水平认证等级和助教评语，为简历添上硬核一笔。</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- 毕业收获 -->
-<section>
+<!-- ========== 毕业收获 ========== -->
+<section id="rewards">
   <div class="container">
-    <div class="label">毕业收获</div>
+    <div class="label amber">毕业收获</div>
     <h2>你将拿到什么</h2>
-    <div class="accent-line"></div>
+    <div class="accent-line amber"></div>
     <img class="grad-img" src="assets/graduation.png" alt="毕业收获：芯片、板卡、认证证书">
-    <p class="body-text" style="margin-top:16px;">完成学习路径后，你将获得：亲手设计的流片芯片实物、开发板卡、以及由"一生一芯"项目组颁发的等级认证证书，包含能力水平认证等级和助教评语。</p>
+    <p class="body-text" style="margin-top:16px;">完成学习路径后：亲手设计的流片芯片实物、开发板卡、以及由"一生一芯"项目组颁发的等级认证证书。</p>
   </div>
 </section>
 
-<!-- 谁可以来 -->
-<section>
+<!-- ========== 谁可以来 ========== -->
+<section id="who">
   <div class="container">
-    <div class="label">谁可以来</div>
+    <div class="label teal">谁可以来</div>
     <h2>不设门槛</h2>
-    <div class="accent-line"></div>
+    <div class="accent-line teal"></div>
     <div class="tags">
       <div class="tag">
         <span class="t1">不限专业</span>
@@ -500,16 +602,16 @@
         <span class="t2">公益项目</span>
       </div>
     </div>
-    <p class="body-text" style="margin-top:28px;">只要你对计算机底层有好奇心，就足够了。</p>
+    <p class="body-text" style="margin-top:28px;">只要你对计算机底层有好奇心，就足够了。支持在校生免费流片，打破教育资源不平衡的壁垒。</p>
   </div>
 </section>
 
-<!-- 宣讲会信息 -->
-<section>
+<!-- ========== 活动详情 ========== -->
+<section id="event">
   <div class="container">
-    <div class="label">宣讲会信息</div>
+    <div class="label teal">宣讲会信息</div>
     <h2>活动详情</h2>
-    <div class="accent-line"></div>
+    <div class="accent-line teal"></div>
     <div class="event-card">
       <div class="event-row">
         <div class="event-time">
@@ -532,13 +634,13 @@
   </div>
 </section>
 
-<!-- 参与方式 -->
-<section>
+<!-- ========== 参与方式 ========== -->
+<section id="signup">
   <div class="container">
-    <div class="label">参与方式</div>
+    <div class="label amber">参与方式</div>
     <h2>提前了解一下</h2>
-    <div class="accent-line"></div>
-    <p class="body-text" style="margin-bottom:8px;">扫描下方二维码，提前填写你的基本信息。活动当天我们会现场签到，在纸质表上完成手写签名。</p>
+    <div class="accent-line amber"></div>
+    <p class="body-text" style="margin-bottom:8px;">扫描下方二维码，提前填写基本信息。活动当天现场签到，在纸质表上完成手写签名。</p>
     <div class="qr-card">
       <img class="qr-img" src="assets/qr-code.png" alt="报名二维码">
       <div class="qr-title">扫码填写信息</div>
@@ -552,12 +654,12 @@
   </div>
 </section>
 
-<!-- 官方链接 -->
-<section>
+<!-- ========== 联系我们 ========== -->
+<section id="contact">
   <div class="container">
-    <div class="label">联系我们</div>
+    <div class="label blue">联系我们</div>
     <h2>了解更多</h2>
-    <div class="accent-line"></div>
+    <div class="accent-line blue"></div>
     <div class="links-card">
       <div class="link-qr-row">
         <div class="link-qr-item">
@@ -570,14 +672,14 @@
         </div>
       </div>
       <div class="link-info">
-        <p>🌐 官网网址：<a href="https://ysyx.org" target="_blank" style="color:#2dd4bf;">ysyx.org</a></p>
-        <p>📧 联系邮箱：ysyx@bosc.ac.cn</p>
+        <p>🌐 官网：<a href="https://ysyx.org" target="_blank">ysyx.org</a></p>
+        <p>📧 邮箱：ysyx@bosc.ac.cn</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Footer -->
+<!-- ========== Footer ========== -->
 <footer>
   <p class="f1">一生一芯 · 高校宣讲会</p>
   <p class="f2">官网：ysyx.org</p>
