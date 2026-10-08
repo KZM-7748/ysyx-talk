@@ -6,680 +6,533 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <title>一生一芯 · 高校宣讲会</title>
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-    background: #0b0f1a;
-    color: #e5e7eb;
-    line-height: 1.7;
-    -webkit-font-smoothing: antialiased;
-  }
-  .container { max-width: 640px; margin: 0 auto; padding: 0 24px; }
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:#0b0f1a;color:#e5e7eb;line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+.container{max-width:640px;margin:0 auto;padding:0 24px}
 
-  /* ===== 配色变量 ===== */
-  /* 主色 teal: #2dd4bf  辅色 blue: #60a5fa  紫色: #a78bfa  琥珀: #fbbf24 */
+/* ===== Hero ===== */
+.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding-bottom:48px;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:url('assets/hero-chip.jpg') center/cover no-repeat;z-index:0}
+.hero::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,15,26,.15) 0%,rgba(11,15,26,.5) 45%,#0b0f1a 100%);z-index:1}
+.hero-content{position:relative;z-index:2}
+.badge{display:inline-block;padding:6px 16px;border:1px solid #2dd4bf;border-radius:999px;color:#2dd4bf;font-size:13px;margin-bottom:24px;letter-spacing:1px}
+.hero h1{font-size:56px;font-weight:800;line-height:1.1;margin-bottom:16px;letter-spacing:2px}
+.hero h1 .green{color:#2dd4bf}
+.hero .subtitle{font-size:18px;color:#9ca3af;margin-bottom:32px;line-height:1.6}
+.date-box,.loc-box{display:flex;align-items:center;gap:10px;background:rgba(45,212,191,.08);border:1px solid rgba(45,212,191,.2);border-radius:12px;padding:16px 20px;color:#2dd4bf;font-size:16px;font-weight:500}
+.loc-box{margin-top:12px}
+.scroll-hint{text-align:center;color:#6b7280;font-size:14px;margin-top:40px;animation:bounce 2s infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
 
-  /* ===== Hero ===== */
-  .hero {
-    position: relative;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    padding-bottom: 48px;
-    overflow: hidden;
-  }
-  .hero-bg {
-    position: absolute; inset: 0;
-    background: url('assets/hero-chip.jpg') center/cover no-repeat;
-    z-index: 0;
-  }
-  .hero::after {
-    content: '';
-    position: absolute; inset: 0;
-    background: linear-gradient(180deg, rgba(11,15,26,0.2) 0%, rgba(11,15,26,0.5) 40%, #0b0f1a 100%);
-    z-index: 1;
-  }
-  .hero-content { position: relative; z-index: 2; }
-  .badge {
-    display: inline-block;
-    padding: 6px 16px;
-    border: 1px solid #2dd4bf;
-    border-radius: 999px;
-    color: #2dd4bf;
-    font-size: 13px;
-    margin-bottom: 24px;
-    letter-spacing: 1px;
-  }
-  .hero h1 {
-    font-size: 56px;
-    font-weight: 800;
-    line-height: 1.1;
-    margin-bottom: 16px;
-    letter-spacing: 2px;
-  }
-  .hero h1 .green { color: #2dd4bf; }
-  .hero .subtitle {
-    font-size: 18px;
-    color: #9ca3af;
-    margin-bottom: 32px;
-    line-height: 1.6;
-  }
-  .date-box, .loc-box {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: rgba(45,212,191,0.08);
-    border: 1px solid rgba(45,212,191,0.2);
-    border-radius: 12px;
-    padding: 16px 20px;
-    color: #2dd4bf;
-    font-size: 16px;
-    font-weight: 500;
-  }
-  .loc-box { margin-top: 12px; }
-  .scroll-hint {
-    text-align: center;
-    color: #6b7280;
-    font-size: 14px;
-    margin-top: 40px;
-  }
+/* ===== Sections ===== */
+section{padding:56px 0;position:relative}
+.section-bg-blue{background:linear-gradient(180deg,transparent 0%,rgba(59,130,246,.04) 50%,transparent 100%)}
+.section-bg-purple{background:linear-gradient(180deg,transparent 0%,rgba(139,92,246,.04) 50%,transparent 100%)}
+.section-bg-amber{background:linear-gradient(180deg,transparent 0%,rgba(245,158,11,.04) 50%,transparent 100%)}
+.section-bg-green{background:linear-gradient(180deg,transparent 0%,rgba(45,212,191,.04) 50%,transparent 100%)}
+.label{font-size:14px;font-weight:600;letter-spacing:1px;margin-bottom:12px}
+.label.teal{color:#2dd4bf}.label.blue{color:#60a5fa}.label.purple{color:#a78bfa}.label.amber{color:#fbbf24}
+h2{font-size:30px;font-weight:800;color:#fff;margin-bottom:16px;line-height:1.25}
+.accent-line{width:40px;height:3px;border-radius:2px;margin-bottom:24px}
+.accent-line.teal{background:#2dd4bf}.accent-line.blue{background:#60a5fa}.accent-line.purple{background:#a78bfa}.accent-line.amber{background:#fbbf24}
+.lead{font-size:19px;font-weight:700;color:#fff;line-height:1.5;margin-bottom:16px}
+.body-text{color:#9ca3af;font-size:16px;line-height:1.8}
+.slide-img{width:100%;border-radius:12px;margin-top:24px;border:1px solid #1f2937}
+.caption{color:#6b7280;font-size:13px;margin-top:10px;text-align:center}
 
-  /* ===== Sections 通用 ===== */
-  section { padding: 56px 0; position: relative; }
-  section:nth-child(even) {
-    background: linear-gradient(180deg, transparent 0%, rgba(45,212,191,0.02) 50%, transparent 100%);
-  }
-  .label {
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    margin-bottom: 12px;
-  }
-  .label.teal { color: #2dd4bf; }
-  .label.blue { color: #60a5fa; }
-  .label.purple { color: #a78bfa; }
-  .label.amber { color: #fbbf24; }
-  h2 {
-    font-size: 32px;
-    font-weight: 800;
-    color: #fff;
-    margin-bottom: 16px;
-    line-height: 1.25;
-  }
-  .accent-line {
-    width: 40px; height: 3px;
-    border-radius: 2px;
-    margin-bottom: 24px;
-  }
-  .accent-line.teal { background: #2dd4bf; }
-  .accent-line.blue { background: #60a5fa; }
-  .accent-line.purple { background: #a78bfa; }
-  .accent-line.amber { background: #fbbf24; }
-  .lead {
-    font-size: 20px;
-    font-weight: 700;
-    color: #fff;
-    line-height: 1.5;
-    margin-bottom: 20px;
-  }
-  .lead .hl-teal { color: #2dd4bf; }
-  .lead .hl-blue { color: #60a5fa; }
-  .body-text {
-    color: #9ca3af;
-    font-size: 16px;
-    line-height: 1.8;
-  }
+/* ===== 动态柱状图（slide2） ===== */
+.chart-wrap{margin-top:28px}
+.chart-title{font-size:15px;color:#d1d5db;font-weight:600;margin-bottom:16px}
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.bar-year{width:60px;font-size:13px;color:#9ca3af;flex-shrink:0;text-align:right}
+.bar-track{flex:1;height:24px;background:rgba(255,255,255,.05);border-radius:6px;overflow:hidden}
+.bar-fill{height:100%;border-radius:6px;width:0;transition:width 1.2s cubic-bezier(.25,.8,.25,1)}
+.bar-fill.c1{background:linear-gradient(90deg,#2dd4bf,#22d3ee)}
+.bar-fill.c2{background:linear-gradient(90deg,#60a5fa,#818cf8)}
+.bar-fill.c3{background:linear-gradient(90deg,#a78bfa,#c084fc)}
+.bar-val{width:55px;font-size:13px;color:#d1d5db;flex-shrink:0}
 
-  /* ===== Stats ===== */
-  .stats-row {
-    display: flex;
-    gap: 12px;
-    margin-top: 32px;
-    flex-wrap: wrap;
-  }
-  .stat-item {
-    flex: 1;
-    min-width: 90px;
-    background: rgba(45,212,191,0.06);
-    border: 1px solid rgba(45,212,191,0.15);
-    border-radius: 12px;
-    padding: 24px 12px;
-    text-align: center;
-  }
-  .stat-item.blue {
-    background: rgba(96,165,250,0.06);
-    border-color: rgba(96,165,250,0.15);
-  }
-  .stat-item.purple {
-    background: rgba(167,139,250,0.06);
-    border-color: rgba(167,139,250,0.15);
-  }
-  .stat-num {
-    font-size: 26px;
-    font-weight: 700;
-    line-height: 1.2;
-  }
-  .stat-item.teal .stat-num { color: #2dd4bf; }
-  .stat-item.blue .stat-num { color: #60a5fa; }
-  .stat-item.purple .stat-num { color: #a78bfa; }
-  .stat-label {
-    font-size: 13px;
-    color: #9ca3af;
-    margin-top: 8px;
-  }
+/* ===== Tabs（就业/升学） ===== */
+.tabs{display:flex;gap:8px;margin-top:28px}
+.tab-btn{flex:1;padding:12px;border:1px solid #374151;background:transparent;color:#9ca3af;border-radius:10px;font-size:14px;cursor:pointer;transition:all .3s}
+.tab-btn.active{background:rgba(96,165,250,.12);border-color:#60a5fa;color:#60a5fa;font-weight:600}
+.tab-panel{display:none;margin-top:16px}
+.tab-panel.active{display:block;animation:fadeIn .4s}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.dest-list{display:flex;flex-wrap:wrap;gap:8px}
+.dest-chip{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:8px 14px;font-size:14px;color:#d1d5db}
 
-  /* ===== 全栈流程图 ===== */
-  .pipeline-img {
-    width: 100%;
-    border-radius: 12px;
-    margin-top: 24px;
-    border: 1px solid #1f2937;
-  }
-  .pipeline-caption {
-    color: #6b7280;
-    font-size: 13px;
-    margin-top: 12px;
-    text-align: center;
-  }
+/* ===== 交互式学习阶段（slide5） ===== */
+.stage-accordion{margin-top:28px}
+.stage-item{border:1px solid #1f2937;border-radius:12px;margin-bottom:10px;overflow:hidden;transition:border-color .3s}
+.stage-item.open{border-color:rgba(45,212,191,.3)}
+.stage-head{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none}
+.stage-badge{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;flex-shrink:0}
+.stage-item:nth-child(1) .stage-badge{background:rgba(45,212,191,.15);color:#2dd4bf}
+.stage-item:nth-child(2) .stage-badge{background:rgba(96,165,250,.15);color:#60a5fa}
+.stage-item:nth-child(3) .stage-badge{background:rgba(129,140,248,.15);color:#818cf8}
+.stage-item:nth-child(4) .stage-badge{background:rgba(167,139,250,.15);color:#a78bfa}
+.stage-item:nth-child(5) .stage-badge{background:rgba(192,132,252,.15);color:#c084fc}
+.stage-item:nth-child(6) .stage-badge{background:rgba(244,114,182,.15);color:#f472b6}
+.stage-item:nth-child(7) .stage-badge{background:rgba(251,191,36,.15);color:#fbbf24}
+.stage-head-info{flex:1}
+.stage-head-name{font-size:16px;font-weight:700;color:#fff}
+.stage-head-desc{font-size:13px;color:#6b7280}
+.stage-arrow{font-size:14px;color:#6b7280;transition:transform .3s}
+.stage-item.open .stage-arrow{transform:rotate(180deg)}
+.stage-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.stage-body-inner{padding:0 18px 18px;color:#9ca3af;font-size:14px;line-height:1.8}
+.stage-body-inner .feat{display:inline-block;background:rgba(255,255,255,.06);border-radius:6px;padding:4px 10px;margin:3px;font-size:13px;color:#d1d5db}
 
-  /* ===== 学习路径（三步） ===== */
-  .stages {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    margin-top: 32px;
-  }
-  .stage { display: flex; gap: 16px; align-items: flex-start; }
-  .stage-num {
-    flex-shrink: 0;
-    width: 44px; height: 44px;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-weight: 700;
-    font-size: 18px;
-  }
-  .stage:nth-child(1) .stage-num { border: 2px solid #2dd4bf; color: #2dd4bf; }
-  .stage:nth-child(2) .stage-num { border: 2px solid #60a5fa; color: #60a5fa; }
-  .stage:nth-child(3) .stage-num { border: 2px solid #a78bfa; color: #a78bfa; }
-  .stage h3 { color: #fff; font-size: 18px; margin-bottom: 6px; }
-  .stage p { color: #9ca3af; font-size: 15px; line-height: 1.6; }
+/* ===== 开放资源 ===== */
+.resource-cards{display:flex;flex-direction:column;gap:12px;margin-top:24px}
+.resource-card{background:rgba(96,165,250,.05);border:1px solid rgba(96,165,250,.15);border-radius:12px;padding:18px 20px;display:flex;align-items:center;gap:14px}
+.resource-icon{font-size:28px;flex-shrink:0}
+.resource-info h3{color:#fff;font-size:15px;margin-bottom:2px}
+.resource-info p{color:#6b7280;font-size:13px}
 
-  /* ===== 阶段课程表 ===== */
-  .stages-img {
-    width: 100%;
-    border-radius: 12px;
-    margin-top: 24px;
-    border: 1px solid #1f2937;
-  }
+/* ===== 收获卡片 ===== */
+.cards{display:flex;flex-direction:column;gap:16px;margin-top:28px}
+.card{background:#111827;border:1px solid #1f2937;border-radius:16px;padding:24px}
+.card .card-tag{display:inline-block;font-size:12px;padding:3px 10px;border-radius:999px;margin-bottom:12px}
+.card:nth-child(1) .card-tag{background:rgba(45,212,191,.12);color:#2dd4bf}
+.card:nth-child(2) .card-tag{background:rgba(96,165,250,.12);color:#60a5fa}
+.card:nth-child(3) .card-tag{background:rgba(167,139,250,.12);color:#a78bfa}
+.card h3{color:#fff;font-size:18px;margin-bottom:10px}
+.card p{color:#9ca3af;font-size:15px;line-height:1.7}
 
-  /* ===== 开放资源 ===== */
-  .resource-cards {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-top: 24px;
-  }
-  .resource-card {
-    background: rgba(96,165,250,0.05);
-    border: 1px solid rgba(96,165,250,0.15);
-    border-radius: 12px;
-    padding: 18px 20px;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-  }
-  .resource-icon {
-    font-size: 28px;
-    flex-shrink: 0;
-  }
-  .resource-info h3 { color: #fff; font-size: 15px; margin-bottom: 2px; }
-  .resource-info p { color: #6b7280; font-size: 13px; }
+/* ===== 毕业收获 ===== */
+.grad-img{width:100%;border-radius:12px;margin-top:24px;border:1px solid #1f2937}
 
-  /* ===== 你将收获 卡片 ===== */
-  .cards {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    margin-top: 32px;
-  }
-  .card {
-    background: #111827;
-    border: 1px solid #1f2937;
-    border-radius: 16px;
-    padding: 24px;
-  }
-  .card h3 { color: #fff; font-size: 18px; margin-bottom: 10px; }
-  .card p { color: #9ca3af; font-size: 15px; line-height: 1.7; }
-  .card .card-tag {
-    display: inline-block;
-    font-size: 12px;
-    padding: 3px 10px;
-    border-radius: 999px;
-    margin-bottom: 12px;
-  }
-  .card:nth-child(1) .card-tag { background: rgba(45,212,191,0.12); color: #2dd4bf; }
-  .card:nth-child(2) .card-tag { background: rgba(96,165,250,0.12); color: #60a5fa; }
-  .card:nth-child(3) .card-tag { background: rgba(167,139,250,0.12); color: #a78bfa; }
+/* ===== 谁可以来 ===== */
+.tags{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+.tag{background:rgba(45,212,191,.08);border:1px solid rgba(45,212,191,.25);border-radius:10px;padding:14px 18px;text-align:center;flex:1;min-width:140px}
+.tag .t1{color:#fff;font-weight:700;font-size:16px;display:block;margin-bottom:4px}
+.tag .t2{color:#6b7280;font-size:13px}
 
-  /* ===== 毕业收获图 ===== */
-  .grad-img {
-    width: 100%;
-    border-radius: 12px;
-    margin-top: 24px;
-    border: 1px solid #1f2937;
-  }
+/* ===== 活动详情 ===== */
+.event-card{background:linear-gradient(135deg,#1a2e2a 0%,#1a2332 100%);border:1px solid rgba(45,212,191,.15);border-radius:16px;padding:28px;margin-top:28px}
+.event-row{display:flex;gap:24px;flex-wrap:wrap}
+.event-time .small{color:#6b7280;font-size:13px;margin-bottom:4px}
+.event-time .date{color:#fff;font-size:18px;font-weight:600}
+.event-time .time{color:#2dd4bf;font-size:28px;font-weight:800}
+.event-loc{margin-left:auto}
+.event-loc .small{color:#6b7280;font-size:13px;margin-bottom:4px}
+.event-loc .loc-val{background:rgba(255,255,255,.06);border-radius:8px;padding:10px 16px;color:#d1d5db;font-size:14px}
+.countdown{display:flex;justify-content:center;gap:10px;margin-top:32px}
+.cd-item{background:#111827;border:1px solid #1f2937;border-radius:12px;padding:14px 8px;text-align:center;min-width:58px}
+.cd-item .num{color:#2dd4bf;font-size:24px;font-weight:800}
+.cd-item .unit{color:#6b7280;font-size:12px;margin-top:4px}
 
-  /* ===== 谁可以来 ===== */
-  .tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-top: 28px;
-  }
-  .tag {
-    background: rgba(45,212,191,0.08);
-    border: 1px solid rgba(45,212,191,0.25);
-    border-radius: 10px;
-    padding: 14px 18px;
-    text-align: center;
-    flex: 1;
-    min-width: 140px;
-  }
-  .tag .t1 { color: #fff; font-weight: 700; font-size: 16px; display: block; margin-bottom: 4px; }
-  .tag .t2 { color: #6b7280; font-size: 13px; }
+/* ===== 报名 ===== */
+.qr-card{background:#111827;border:1px solid #1f2937;border-radius:16px;padding:32px 24px;margin-top:28px;text-align:center}
+.qr-img{width:200px;height:200px;border-radius:12px;margin:0 auto 16px;display:block}
+.qr-title{color:#fff;font-size:18px;font-weight:700;margin-bottom:6px}
+.qr-sub{color:#6b7280;font-size:14px;margin-bottom:20px}
+.note{background:rgba(251,191,36,.08);border-radius:10px;padding:16px;color:#d1d5db;font-size:14px;line-height:1.7;text-align:left;margin-bottom:20px}
+.note .hl{color:#fbbf24;font-weight:600}
+.sign-img{width:100%;border-radius:10px;margin-top:8px}
+.sign-caption{color:#6b7280;font-size:13px;margin-top:12px}
 
-  /* ===== 活动详情 ===== */
-  .event-card {
-    background: linear-gradient(135deg, #1a2e2a 0%, #1a2332 100%);
-    border: 1px solid rgba(45,212,191,0.15);
-    border-radius: 16px;
-    padding: 28px;
-    margin-top: 28px;
-  }
-  .event-row { display: flex; gap: 24px; flex-wrap: wrap; }
-  .event-time .small { color: #6b7280; font-size: 13px; margin-bottom: 4px; }
-  .event-time .date { color: #fff; font-size: 18px; font-weight: 600; }
-  .event-time .time { color: #2dd4bf; font-size: 28px; font-weight: 800; }
-  .event-loc { margin-left: auto; }
-  .event-loc .small { color: #6b7280; font-size: 13px; margin-bottom: 4px; }
-  .event-loc .loc-val {
-    background: rgba(255,255,255,0.06);
-    border-radius: 8px;
-    padding: 10px 16px;
-    color: #d1d5db;
-    font-size: 14px;
-  }
-  .countdown {
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-    margin-top: 32px;
-  }
-  .cd-item {
-    background: #111827;
-    border: 1px solid #1f2937;
-    border-radius: 12px;
-    padding: 16px 10px;
-    text-align: center;
-    min-width: 60px;
-  }
-  .cd-item .num { color: #2dd4bf; font-size: 26px; font-weight: 800; }
-  .cd-item .unit { color: #6b7280; font-size: 13px; margin-top: 4px; }
+/* ===== 联系我们（4个二维码） ===== */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:28px}
+.contact-item{text-align:center}
+.contact-qr{width:130px;height:130px;border-radius:10px;margin:0 auto;background:#fff;padding:6px;display:block}
+.contact-label{margin-top:10px;font-size:14px;font-weight:600;color:#fff}
+.contact-sub{font-size:12px;color:#6b7280;margin-top:2px}
+.contact-info{margin-top:24px;text-align:center;color:#9ca3af;font-size:14px;line-height:2}
+.contact-info a{color:#2dd4bf;text-decoration:none}
+.contact-banner{margin-top:20px;background:linear-gradient(135deg,rgba(45,212,191,.08),rgba(96,165,250,.08));border:1px solid rgba(45,212,191,.15);border-radius:12px;padding:20px;text-align:center;color:#d1d5db;font-size:15px;line-height:1.8}
 
-  /* ===== 报名二维码 ===== */
-  .qr-card {
-    background: #111827;
-    border: 1px solid #1f2937;
-    border-radius: 16px;
-    padding: 32px 24px;
-    margin-top: 28px;
-    text-align: center;
-  }
-  .qr-img {
-    width: 200px; height: 200px;
-    border-radius: 12px;
-    margin: 0 auto 16px;
-    display: block;
-  }
-  .qr-title { color: #fff; font-size: 18px; font-weight: 700; margin-bottom: 6px; }
-  .qr-sub { color: #6b7280; font-size: 14px; margin-bottom: 20px; }
-  .note {
-    background: rgba(251,191,36,0.08);
-    border-radius: 10px;
-    padding: 16px;
-    color: #d1d5db;
-    font-size: 14px;
-    line-height: 1.7;
-    text-align: left;
-    margin-bottom: 20px;
-  }
-  .note .hl { color: #fbbf24; font-weight: 600; }
-  .sign-img {
-    width: 100%;
-    border-radius: 10px;
-    margin-top: 8px;
-  }
-  .sign-caption { color: #6b7280; font-size: 13px; margin-top: 12px; }
+/* ===== Footer ===== */
+footer{text-align:center;padding:48px 24px;border-top:1px solid #1f2937;margin-top:24px}
+footer .f1{color:#9ca3af;font-size:15px;margin-bottom:8px}
+footer .f2{color:#2dd4bf;font-size:15px;margin-bottom:8px}
+footer .f3{color:#6b7280;font-size:14px}
 
-  /* ===== 联系我们 ===== */
-  .links-card {
-    background: rgba(255,255,255,0.03);
-    border: 1px solid #1f2937;
-    border-radius: 16px;
-    padding: 32px 24px;
-    margin-top: 24px;
-  }
-  .link-qr-row {
-    display: flex;
-    gap: 32px;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-bottom: 24px;
-  }
-  .link-qr-item { text-align: center; }
-  .link-qr-img {
-    width: 120px; height: 120px;
-    border-radius: 8px;
-    background: #fff;
-    padding: 6px;
-  }
-  .link-qr-label {
-    margin-top: 10px;
-    font-size: 14px;
-    color: #d1d5db;
-  }
-  .link-info {
-    text-align: center;
-    color: #9ca3af;
-    font-size: 15px;
-    line-height: 2;
-  }
-  .link-info a { color: #2dd4bf; text-decoration: none; }
-
-  /* ===== Footer ===== */
-  footer {
-    text-align: center;
-    padding: 48px 24px;
-    border-top: 1px solid #1f2937;
-    margin-top: 24px;
-  }
-  footer .f1 { color: #9ca3af; font-size: 15px; margin-bottom: 8px; }
-  footer .f2 { color: #2dd4bf; font-size: 15px; margin-bottom: 8px; }
-  footer .f3 { color: #6b7280; font-size: 14px; }
+/* ===== 滚动动画 ===== */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
 </style>
 </head>
 <body>
 
-<!-- ========== Hero ========== -->
+<!-- ===== Hero ===== -->
 <div class="hero" id="hero">
   <div class="hero-bg"></div>
   <div class="hero-content container">
     <span class="badge">高校公益宣讲</span>
     <h1>一生<span class="green">一芯</span></h1>
     <p class="subtitle">从零开始，亲手设计一颗<br>属于你自己的 RISC-V 处理器</p>
-    <div class="date-box">
-      <span>🗓</span>
-      <span>2026年10月17日 14:00 — 16:00</span>
-    </div>
-    <div class="loc-box">
-      <span>📍</span>
-      <span>N5-301 会议室</span>
-    </div>
+    <div class="date-box"><span>🗓</span><span>2026年10月17日 14:00 — 16:00</span></div>
+    <div class="loc-box"><span>📍</span><span>N5-301 会议室</span></div>
     <p class="scroll-hint">向下滑动了解更多</p>
   </div>
 </div>
 
-<!-- ========== 关于项目 ========== -->
+<!-- ===== 关于项目 ===== -->
 <section id="about">
   <div class="container">
-    <div class="label teal">关于项目</div>
-    <h2>这是什么？</h2>
-    <div class="accent-line teal"></div>
-    <p class="lead">一场<span class="hl-teal">完全免费</span>的芯片设计之旅，<br>从代码开始，到一颗真正的芯片结束。</p>
-    <p class="body-text">"一生一芯"是2019年由中国科学院大学联合中科院计算技术研究所启动的公益性芯片培养项目，对标国际 MOSIS 项目。不需要你有深厚的专业背景——只要你对"计算机到底是怎么跑起来的"感到好奇，就能在这里找到答案。</p>
+    <div class="reveal">
+      <div class="label teal">关于项目</div>
+      <h2>这是什么？</h2>
+      <div class="accent-line teal"></div>
+      <p class="lead">一场<span style="color:#2dd4bf">完全免费</span>的芯片设计之旅，<br>从代码开始，到一颗真正的芯片结束。</p>
+      <p class="body-text">"一生一芯"是2019年由中国科学院大学联合中科院计算技术研究所启动的公益性芯片培养项目，对标国际 MOSIS 项目。不需要你有深厚的专业背景——只要你对"计算机到底是怎么跑起来的"感到好奇，就能在这里找到答案。</p>
+    </div>
   </div>
 </section>
 
-<!-- ========== 项目规模 ========== -->
+<!-- ===== 起源故事（slide1） ===== -->
+<section class="section-bg-blue">
+  <div class="container">
+    <div class="reveal">
+      <div class="label blue">为什么要做这件事</div>
+      <h2>从 MOSIS 到一生一芯</h2>
+      <div class="accent-line blue"></div>
+      <p class="body-text">1981年，美国启动 MOSIS 项目，提出 MPW 模式，让大学和学生也能流片，三十余年流了60000多款芯片，培养了数万名学生。2019年，中国做了同样的事——这就是"一生一芯"。</p>
+      <img class="slide-img" src="assets/slide-origin.jpg" alt="MOSIS到一生一芯的发展历程">
+      <p class="caption">从美国MOSIS到中国一生一芯，降低芯片设计门槛，让学生也能流片</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 社区规模（slide2 动态交互） ===== -->
 <section id="scale">
   <div class="container">
-    <div class="label blue">项目规模</div>
-    <h2>全国规模最大的芯片人才社区</h2>
-    <div class="accent-line blue"></div>
-    <div class="stats-row">
-      <div class="stat-item teal">
-        <div class="stat-num">20000+</div>
-        <div class="stat-label">累计报名人数</div>
-      </div>
-      <div class="stat-item blue">
-        <div class="stat-num">1300+</div>
-        <div class="stat-label">覆盖全球学校</div>
-      </div>
-      <div class="stat-item purple">
-        <div class="stat-num">近2000</div>
-        <div class="stat-label">培养学生人数</div>
-      </div>
-    </div>
-    <p class="body-text" style="margin-top:24px;">项目用"开源开放、独立解决问题、软硬件全栈、芯片全链条"的理念培养人才。学员毕业后进入国内芯片企业或高校课题组，投身处理器芯片、计算机系统、系统软件等方向，攻关卡脖子领域。</p>
-  </div>
-</section>
+    <div class="reveal">
+      <div class="label blue">项目规模</div>
+      <h2>全国规模最大的芯片人才社区</h2>
+      <div class="accent-line blue"></div>
 
-<!-- ========== 全栈流程 ========== -->
-<section id="pipeline">
-  <div class="container">
-    <div class="label purple">全栈流程</div>
-    <h2>从软件到芯片，一条完整链路</h2>
-    <div class="accent-line purple"></div>
-    <p class="body-text">这不是只学写代码，也不是只学画版图。你会经历从 IP 设计、SoC 集成、EDA 工具，到掩模制造、再到基础软件适配和应用开发的完整链条。</p>
-    <img class="pipeline-img" src="assets/pipeline.png" alt="处理器芯片及其基础软件全链路">
-    <p class="pipeline-caption">芯片设计 → 芯片制造 → 软件开发，前后端全链条贯通</p>
-  </div>
-</section>
+      <!-- 动态柱状图 -->
+      <div class="chart-wrap">
+        <div class="chart-title">📈 每年报名人数</div>
+        <div class="bar-row"><span class="bar-year">2019</span><div class="bar-track"><div class="bar-fill c1" data-w="1"></div></div><span class="bar-val">5</span></div>
+        <div class="bar-row"><span class="bar-year">2020</span><div class="bar-track"><div class="bar-fill c1" data-w="2"></div></div><span class="bar-val">11</span></div>
+        <div class="bar-row"><span class="bar-year">2021</span><div class="bar-track"><div class="bar-fill c2" data-w="12"></div></div><span class="bar-val">760</span></div>
+        <div class="bar-row"><span class="bar-year">2022</span><div class="bar-track"><div class="bar-fill c2" data-w="40"></div></div><span class="bar-val">2634</span></div>
+        <div class="bar-row"><span class="bar-year">2023</span><div class="bar-track"><div class="bar-fill c2" data-w="42"></div></div><span class="bar-val">2723</span></div>
+        <div class="bar-row"><span class="bar-year">2024</span><div class="bar-track"><div class="bar-fill c3" data-w="64"></div></div><span class="bar-val">4200</span></div>
+        <div class="bar-row"><span class="bar-year">2025</span><div class="bar-track"><div class="bar-fill c3" data-w="100"></div></div><span class="bar-val">6543</span></div>
+        <div class="bar-row"><span class="bar-year">2026</span><div class="bar-track"><div class="bar-fill c3" data-w="56"></div></div><span class="bar-val">3683</span></div>
+      </div>
 
-<!-- ========== 学习路径 ========== -->
-<section id="path">
-  <div class="container">
-    <div class="label teal">学习路径</div>
-    <h2>你会经历什么</h2>
-    <div class="accent-line teal"></div>
-    <p class="body-text" style="margin-bottom:8px;">三个阶段，一步步从理论走向实物。</p>
-    <div class="stages">
-      <div class="stage">
-        <div class="stage-num">1</div>
-        <div>
-          <h3>CPU 设计</h3>
-          <p>用 Verilog 从零写出一个能跑程序的处理器核心，从3条指令的数列求和开始</p>
+      <!-- Tab切换 -->
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="job">就业去向</button>
+        <button class="tab-btn" data-tab="grad">升学去向</button>
+      </div>
+      <div class="tab-panel active" id="panel-job">
+        <div class="dest-list">
+          <span class="dest-chip">华为海思</span><span class="dest-chip">开芯院</span><span class="dest-chip">海光信息</span><span class="dest-chip">飞腾</span><span class="dest-chip">ARM中国</span><span class="dest-chip">大疆</span><span class="dest-chip">进迭时空</span><span class="dest-chip">摩尔线程</span><span class="dest-chip">龙芯中科</span><span class="dest-chip">字节跳动</span>
         </div>
       </div>
-      <div class="stage">
-        <div class="stage-num">2</div>
-        <div>
-          <h3>操作系统</h3>
-          <p>在你自己设计的 CPU 上跑起 RT-Thread、Linux，让芯片真正有用</p>
+      <div class="tab-panel" id="panel-grad">
+        <div class="dest-list">
+          <span class="dest-chip">中科院计算所</span><span class="dest-chip">南京大学</span><span class="dest-chip">香港科技大学</span><span class="dest-chip">上海科技大学</span><span class="dest-chip">中科院微电子所</span><span class="dest-chip">清华大学</span><span class="dest-chip">中科大</span><span class="dest-chip">CMU</span><span class="dest-chip">UIUC</span><span class="dest-chip">EPFL</span>
         </div>
       </div>
-      <div class="stage">
-        <div class="stage-num">3</div>
-        <div>
-          <h3>芯片版图与流片</h3>
-          <p>完成物理版图设计，提交工厂流片，把你的设计变成拿在手里的芯片</p>
-        </div>
-      </div>
-    </div>
-    <img class="stages-img" src="assets/stages.png" alt="阶段划分课程表">
-    <p class="pipeline-caption">从 F 阶段（数列求和）到 S 阶段（乱序超标量），覆盖大一上到研究生</p>
-  </div>
-</section>
-
-<!-- ========== 开放资源 ========== -->
-<section id="resources">
-  <div class="container">
-    <div class="label blue">开放资源</div>
-    <h2>学习资源全部开放</h2>
-    <div class="accent-line blue"></div>
-    <p class="body-text">不需要报名才能看资料。课程讲义、代码、视频全部公开，随到随学。</p>
-    <div class="resource-cards">
-      <div class="resource-card">
-        <div class="resource-icon">📺</div>
-        <div class="resource-info">
-          <h3>B站视频教程</h3>
-          <p>搜索"一生一芯"，教学视频时长 40+ 小时</p>
-        </div>
-      </div>
-      <div class="resource-card">
-        <div class="resource-icon">📖</div>
-        <div class="resource-info">
-          <h3>在线课程文档</h3>
-          <p>ysyx.org/docs/，讲义 42 万字，课件 1000+ 页</p>
-        </div>
-      </div>
-      <div class="resource-card">
-        <div class="resource-icon">💻</div>
-        <div class="resource-info">
-          <h3>代码全部开源</h3>
-          <p>课件讲解 + 代码演示 + 完整工程仓库</p>
-        </div>
-      </div>
+      <p class="body-text" style="margin-top:24px">累计报名超20000人，覆盖全球学校超1300所，培养学生近2000人。</p>
     </div>
   </div>
 </section>
 
-<!-- ========== 你将收获 ========== -->
+<!-- ===== 全栈架构（slide3） ===== -->
+<section class="section-bg-purple">
+  <div class="container">
+    <div class="reveal">
+      <div class="label purple">全栈架构</div>
+      <h2>从软件到芯片，一条完整链路</h2>
+      <div class="accent-line purple"></div>
+      <p class="body-text">这不是只学写代码，也不是只学画版图。你会经历从应用程序到芯片版图的全部9层——软件层（CS）和硬件层（EE），打通前后端。</p>
+      <img class="slide-img" src="assets/slide-stack.jpg" alt="一生一芯全栈架构图">
+      <p class="caption">应用程序 → 运行时 → 操作系统 → 指令集 → 微结构 → 电路 → 综合 → 物理设计 → 版图</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 交互式学习阶段（slide5） ===== -->
+<section id="stages">
+  <div class="container">
+    <div class="reveal">
+      <div class="label teal">学习路径</div>
+      <h2>高标准，低门槛</h2>
+      <div class="accent-line teal"></div>
+      <p class="body-text">覆盖从中学到研究生的知识。小而简单的系统，逐步变成大而复杂的系统。点击下方各阶段查看详情：</p>
+
+      <div class="stage-accordion">
+        <div class="stage-item">
+          <div class="stage-head">
+            <div class="stage-badge">F/E</div>
+            <div class="stage-head-info"><div class="stage-head-name">入门阶段</div><div class="stage-head-desc">中学 · 大一上</div></div>
+            <div class="stage-arrow">▼</div>
+          </div>
+          <div class="stage-body"><div class="stage-body-inner">
+            <span class="feat">数列求和</span><span class="feat">3条指令</span><span class="feat">单周期处理器</span>
+            <p style="margin-top:10px">从零开始，写一个最小的处理器核心，让它算出 1+2+3+…+10。</p>
+          </div></div>
+        </div>
+
+        <div class="stage-item">
+          <div class="stage-head">
+            <div class="stage-badge">D</div>
+            <div class="stage-head-info"><div class="stage-head-name">数字逻辑基础</div><div class="stage-head-desc">大一下</div></div>
+            <div class="stage-arrow">▼</div>
+          </div>
+          <div class="stage-body"><div class="stage-body-inner">
+            <span class="feat">9条指令</span><span class="feat">单周期</span><span class="feat">外设</span>
+            <p style="margin-top:10px">扩展到9条指令，让处理器跑超级玛丽。</p>
+          </div></div>
+        </div>
+
+        <div class="stage-item">
+          <div class="stage-head">
+            <div class="stage-badge">C</div>
+            <div class="stage-head-info"><div class="stage-head-name">RT-Thread + 单周期</div><div class="stage-head-desc">大二上</div></div>
+            <div class="stage-arrow">▼</div>
+          </div>
+          <div class="stage-body"><div class="stage-body-inner">
+            <span class="feat">RV32E（45条指令）</span><span class="feat">RT-Thread</span><span class="feat">单周期</span><span class="feat">外设</span>
+            <p style="margin-top:10px">指令集扩展到45条，跑起 RT-Thread 实时操作系统。</p>
+          </div></div>
+        </div>
+
+        <div class="stage-item">
+          <div class="stage-head">
+            <div class="stage-badge">B</div>
+            <div class="stage-head-info"><div class="stage-head-name">流水线 + Cache</div><div class="stage-head-desc">大二下</div></div>
+            <div class="stage-arrow">▼</div>
+          </div>
+          <div class="stage-body"><div class="stage-body-inner">
+            <span class="feat">RV32E</span><span class="feat">流水线</span><span class="feat">Cache</span><span class="feat">总线+SoC</span><span class="feat">外设</span>
+            <p style="margin-top:10px">从单周期升级为流水线，加 Cache，用总线连接 SoC。</p>
+          </div></div>
+        </div>
+
+        <div class="stage-item">
+          <div class="stage-head">
+            <div class="stage-badge">A</div>
+            <div class="stage-head-info"><div class="stage-head-name">Linux + 特权级</div><div class="stage-head-desc">大三下</div></div>
+            <div class="stage-arrow">▼</div>
+          </div>
+          <div class="stage-body"><div class="stage-body-inner">
+            <span class="feat">RV32GC（~100条）</span><span class="feat">特权级</span><span class="feat">MMU</span><span class="feat">自制OS/Linux</span><span class="feat">仙剑/Debian</span>
+            <p style="margin-top:10px">指令扩展到约100条，加特权级和MMU，跑起 Linux 和 Debian。</p>
+          </div></div>
+        </div>
+
+        <div class="stage-item">
+          <div class="stage-head">
+            <div class="stage-badge">S</div>
+            <div class="stage-head-info"><div class="stage-head-name">乱序超标量</div><div class="stage-head-desc">研究生</div></div>
+            <div class="stage-arrow">▼</div>
+          </div>
+          <div class="stage-body"><div class="stage-body-inner">
+            <span class="feat">乱序超标量</span><span class="feat">体系结构优化</span><span class="feat">总线+SoC</span>
+            <p style="margin-top:10px">最高阶段，实现乱序超标量处理器，对标现代商用CPU。</p>
+          </div></div>
+        </div>
+
+        <div class="stage-item">
+          <div class="stage-head">
+            <div class="stage-badge">🎁</div>
+            <div class="stage-head-info"><div class="stage-head-name">申请入学答辩</div><div class="stage-head-desc">E阶段结束后</div></div>
+            <div class="stage-arrow">▼</div>
+          </div>
+          <div class="stage-body"><div class="stage-body-inner">
+            <p>E阶段结束后，申请入学答辩，通过后进入D阶段继续深入学习。</p>
+          </div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 芯片诞生之旅（slide8） ===== -->
+<section class="section-bg-purple">
+  <div class="container">
+    <div class="reveal">
+      <div class="label purple">芯片诞生之旅</div>
+      <h2>你的设计如何变成实物</h2>
+      <div class="accent-line purple"></div>
+      <p class="body-text">从彩色版图到显微镜下的晶圆，从封装好的芯片到焊在开发板上的成品，这就是你的设计变成实物的全过程。</p>
+      <img class="slide-img" src="assets/slide-chipflow.jpg" alt="处理器芯片和板卡展示">
+      <p class="caption">版图 → 晶圆 → 裸片 → 封装 → 板卡，6步走完芯片诞生全流程</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 开放资源（slide6） ===== -->
+<section class="section-bg-blue">
+  <div class="container">
+    <div class="reveal">
+      <div class="label blue">开放资源</div>
+      <h2>学习资源全部开放</h2>
+      <div class="accent-line blue"></div>
+      <div class="resource-cards">
+        <div class="resource-card"><div class="resource-icon">📺</div><div class="resource-info"><h3>B站视频教程</h3><p>搜索"一生一芯"，教学视频 40+ 小时</p></div></div>
+        <div class="resource-card"><div class="resource-icon">📖</div><div class="resource-info"><h3>在线课程文档</h3><p>ysyx.org/docs/，讲义42万字，课件1000+页</p></div></div>
+        <div class="resource-card"><div class="resource-icon">💻</div><div class="resource-info"><h3>代码全部开源</h3><p>课件讲解 + 代码演示 + 完整工程</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 你将收获 ===== -->
 <section id="gains">
   <div class="container">
-    <div class="label purple">你将收获</div>
-    <h2>能做到这些</h2>
-    <div class="accent-line purple"></div>
-    <div class="cards">
-      <div class="card">
-        <span class="card-tag">跑起来</span>
-        <h3>让你的芯片跑起超级玛丽</h3>
-        <p>在自己设计的处理器上运行经典游戏。从 Verilog 代码开始，搭建流水线、实现指令集，最终在 FPGA 上验证你的 CPU 能加载并运行 NES 游戏。</p>
+    <div class="reveal">
+      <div class="label purple">你将收获</div>
+      <h2>能做到这些</h2>
+      <div class="accent-line purple"></div>
+      <div class="cards">
+        <div class="card">
+          <span class="card-tag">跑起来</span>
+          <h3>让你的芯片跑起超级玛丽</h3>
+          <p>在自己设计的处理器上运行经典游戏。从 Verilog 代码开始，搭建流水线、实现指令集，最终在 FPGA 上验证你的 CPU 能运行 NES 游戏。</p>
+        </div>
+        <div class="card">
+          <span class="card-tag">流片</span>
+          <h3>拿到一颗真实的芯片</h3>
+          <p>优秀学员将参与流片，把你的设计变成物理实物。完成从 RTL 到 GDSII 的全流程，几个月后收到一颗刻着你名字的芯片。</p>
+        </div>
+        <div class="card">
+          <span class="card-tag">认证</span>
+          <h3>官方认证与学习证明</h3>
+          <p>完成学习路径的学员将获得由"一生一芯"项目组颁发的等级认证证书，包含能力水平认证等级和助教评语，为简历添上硬核一笔。</p>
+        </div>
       </div>
-      <div class="card">
-        <span class="card-tag">流片</span>
-        <h3>拿到一颗真实的芯片</h3>
-        <p>优秀学员将参与流片，把你的设计变成物理实物拿在手里。完成从 RTL 到 GDSII 的全流程，几个月后收到一颗刻着你名字的芯片。</p>
-      </div>
-      <div class="card">
-        <span class="card-tag">认证</span>
-        <h3>官方认证与学习证明</h3>
-        <p>完成学习路径的学员将获得由"一生一芯"项目组颁发的等级认证证书，包含能力水平认证等级和助教评语，为简历添上硬核一笔。</p>
-      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 毕业收获（slide7） ===== -->
+<section class="section-bg-amber">
+  <div class="container">
+    <div class="reveal">
+      <div class="label amber">毕业收获</div>
+      <h2>你将拿到什么</h2>
+      <div class="accent-line amber"></div>
+      <img class="grad-img" src="assets/graduation.png" alt="毕业收获：芯片、板卡、认证证书">
+      <p class="body-text" style="margin-top:16px">完成学习路径后：亲手设计的流片芯片实物、开发板卡、以及由"一生一芯"项目组颁发的等级认证证书。</p>
     </div>
   </div>
 </section>
 
-<!-- ========== 毕业收获 ========== -->
-<section id="rewards">
+<!-- ===== 谁可以来 ===== -->
+<section class="section-bg-green">
   <div class="container">
-    <div class="label amber">毕业收获</div>
-    <h2>你将拿到什么</h2>
-    <div class="accent-line amber"></div>
-    <img class="grad-img" src="assets/graduation.png" alt="毕业收获：芯片、板卡、认证证书">
-    <p class="body-text" style="margin-top:16px;">完成学习路径后：亲手设计的流片芯片实物、开发板卡、以及由"一生一芯"项目组颁发的等级认证证书。</p>
-  </div>
-</section>
-
-<!-- ========== 谁可以来 ========== -->
-<section id="who">
-  <div class="container">
-    <div class="label teal">谁可以来</div>
-    <h2>不设门槛</h2>
-    <div class="accent-line teal"></div>
-    <div class="tags">
-      <div class="tag">
-        <span class="t1">不限专业</span>
-        <span class="t2">文理科都欢迎</span>
+    <div class="reveal">
+      <div class="label teal">谁可以来</div>
+      <h2>不设门槛</h2>
+      <div class="accent-line teal"></div>
+      <div class="tags">
+        <div class="tag"><span class="t1">不限专业</span><span class="t2">文理科都欢迎</span></div>
+        <div class="tag"><span class="t1">不限年级</span><span class="t2">大一到研三</span></div>
+        <div class="tag"><span class="t1">完全免费</span><span class="t2">公益项目</span></div>
       </div>
-      <div class="tag">
-        <span class="t1">不限年级</span>
-        <span class="t2">大一到研三</span>
-      </div>
-      <div class="tag">
-        <span class="t1">完全免费</span>
-        <span class="t2">公益项目</span>
-      </div>
+      <p class="body-text" style="margin-top:28px">只要你对计算机底层有好奇心，就足够了。支持在校生免费流片，打破教育资源不平衡的壁垒。</p>
     </div>
-    <p class="body-text" style="margin-top:28px;">只要你对计算机底层有好奇心，就足够了。支持在校生免费流片，打破教育资源不平衡的壁垒。</p>
   </div>
 </section>
 
-<!-- ========== 活动详情 ========== -->
+<!-- ===== 活动详情 ===== -->
 <section id="event">
   <div class="container">
-    <div class="label teal">宣讲会信息</div>
-    <h2>活动详情</h2>
-    <div class="accent-line teal"></div>
-    <div class="event-card">
-      <div class="event-row">
-        <div class="event-time">
-          <div class="small">时间</div>
-          <div class="date">2026年10月17日</div>
-          <div class="time">14:00 — 16:00</div>
-        </div>
-        <div class="event-loc">
-          <div class="small">地点</div>
-          <div class="loc-val">N5-301 会议室</div>
+    <div class="reveal">
+      <div class="label teal">宣讲会信息</div>
+      <h2>活动详情</h2>
+      <div class="accent-line teal"></div>
+      <div class="event-card">
+        <div class="event-row">
+          <div class="event-time">
+            <div class="small">时间</div>
+            <div class="date">2026年10月17日</div>
+            <div class="time">14:00 — 16:00</div>
+          </div>
+          <div class="event-loc">
+            <div class="small">地点</div>
+            <div class="loc-val">N5-301 会议室</div>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="countdown" id="countdown">
-      <div class="cd-item"><div class="num" id="cd-d">--</div><div class="unit">天</div></div>
-      <div class="cd-item"><div class="num" id="cd-h">--</div><div class="unit">时</div></div>
-      <div class="cd-item"><div class="num" id="cd-m">--</div><div class="unit">分</div></div>
-      <div class="cd-item"><div class="num" id="cd-s">--</div><div class="unit">秒</div></div>
+      <div class="countdown" id="countdown">
+        <div class="cd-item"><div class="num" id="cd-d">--</div><div class="unit">天</div></div>
+        <div class="cd-item"><div class="num" id="cd-h">--</div><div class="unit">时</div></div>
+        <div class="cd-item"><div class="num" id="cd-m">--</div><div class="unit">分</div></div>
+        <div class="cd-item"><div class="num" id="cd-s">--</div><div class="unit">秒</div></div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ========== 参与方式 ========== -->
+<!-- ===== 参与方式 ===== -->
 <section id="signup">
   <div class="container">
-    <div class="label amber">参与方式</div>
-    <h2>提前了解一下</h2>
-    <div class="accent-line amber"></div>
-    <p class="body-text" style="margin-bottom:8px;">扫描下方二维码，提前填写基本信息。活动当天现场签到，在纸质表上完成手写签名。</p>
-    <div class="qr-card">
-      <img class="qr-img" src="assets/qr-code.png" alt="报名二维码">
-      <div class="qr-title">扫码填写信息</div>
-      <div class="qr-sub">姓名 · 单位 · 联系方式</div>
-      <div class="note">
-        <span class="hl">说明：</span>扫码后只需填写前三行基本信息（姓名、单位、联系方式），<span class="hl">签名一栏当天现场手写即可</span>。提前填写能帮我们更快完成签到，不用现场排队填表。
+    <div class="reveal">
+      <div class="label amber">参与方式</div>
+      <h2>提前了解一下</h2>
+      <div class="accent-line amber"></div>
+      <p class="body-text" style="margin-bottom:8px">扫描下方二维码，提前填写基本信息。活动当天现场签到，在纸质表上完成手写签名。</p>
+      <div class="qr-card">
+        <img class="qr-img" src="assets/qr-code.png" alt="报名二维码">
+        <div class="qr-title">扫码填写信息</div>
+        <div class="qr-sub">姓名 · 单位 · 联系方式</div>
+        <div class="note">
+          <span class="hl">说明：</span>扫码后只需填写前三行基本信息（姓名、单位、联系方式），<span class="hl">签名一栏当天现场手写即可</span>。提前填写能帮我们更快完成签到，不用现场排队填表。
+        </div>
+        <img class="sign-img" src="assets/sign-sheet.png" alt="签领表示例">
+        <p class="sign-caption">这是当天使用的签领表样式，提前填好前三列，到场后直接在"签字"栏签名就行。</p>
       </div>
-      <img class="sign-img" src="assets/sign-sheet.png" alt="签领表示例">
-      <p class="sign-caption">这是当天使用的签领表样式，提前填好前三列，到场后直接在"签字"栏签名就行。</p>
     </div>
   </div>
 </section>
 
-<!-- ========== 联系我们 ========== -->
+<!-- ===== 联系我们（slide9 全部信息） ===== -->
 <section id="contact">
   <div class="container">
-    <div class="label blue">联系我们</div>
-    <h2>了解更多</h2>
-    <div class="accent-line blue"></div>
-    <div class="links-card">
-      <div class="link-qr-row">
-        <div class="link-qr-item">
-          <img class="link-qr-img" src="assets/qr-official.png" alt="官网二维码">
-          <div class="link-qr-label">官网</div>
+    <div class="reveal">
+      <div class="label blue">了解更多</div>
+      <h2>随到随学，全年开放报名</h2>
+      <div class="accent-line blue"></div>
+
+      <div class="contact-grid">
+        <div class="contact-item">
+          <img class="contact-qr" src="assets/qr-web.png" alt="官网二维码">
+          <div class="contact-label">官方网站</div>
+          <div class="contact-sub">ysyx.org</div>
         </div>
-        <div class="link-qr-item">
-          <img class="link-qr-img" src="assets/qr-group.png" alt="高校交流群二维码">
-          <div class="link-qr-label">高校交流群</div>
+        <div class="contact-item">
+          <img class="contact-qr" src="assets/qr-mp.png" alt="公众号二维码">
+          <div class="contact-label">一生一芯公众号</div>
+          <div class="contact-sub">官方动态</div>
+        </div>
+        <div class="contact-item">
+          <img class="contact-qr" src="assets/qr-uni.png" alt="高校交流群二维码">
+          <div class="contact-label">高校方向咨询群</div>
+          <div class="contact-sub">备注：学校/学院-姓名</div>
+        </div>
+        <div class="contact-item">
+          <img class="contact-qr" src="assets/qr-ent.png" alt="企业交流群二维码">
+          <div class="contact-label">企业方向咨询群</div>
+          <div class="contact-sub">备注：企业/组织-姓名</div>
         </div>
       </div>
-      <div class="link-info">
-        <p>🌐 官网：<a href="https://ysyx.org" target="_blank">ysyx.org</a></p>
-        <p>📧 邮箱：ysyx@bosc.ac.cn</p>
+
+      <div class="contact-banner">
+        扫码或登录 <a href="https://ysyx.org" target="_blank">ysyx.org</a> 点击"立即参与"<br>
+        群内提供合作资料、同步最新动态与答疑
+      </div>
+
+      <div class="contact-info">
+        📧 联系邮箱：ysyx@ict.ac.cn 或 suxiaoke@ict.ac.cn
       </div>
     </div>
   </div>
 </section>
 
-<!-- ========== Footer ========== -->
+<!-- ===== Footer ===== -->
 <footer>
   <p class="f1">一生一芯 · 高校宣讲会</p>
   <p class="f2">官网：ysyx.org</p>
@@ -688,23 +541,62 @@
 
 <script>
 (function(){
+  // ===== 倒计时 =====
   var target = new Date('2026-10-17T14:00:00+08:00').getTime();
-  function pad(n){ return n < 10 ? '0'+n : ''+n; }
+  function pad(n){return n<10?'0'+n:''+n}
   function tick(){
-    var now = Date.now();
-    var diff = target - now;
-    if (diff < 0) diff = 0;
-    var d = Math.floor(diff / 86400000);
-    var h = Math.floor((diff % 86400000) / 3600000);
-    var m = Math.floor((diff % 3600000) / 60000);
-    var s = Math.floor((diff % 60000) / 1000);
-    document.getElementById('cd-d').textContent = d;
-    document.getElementById('cd-h').textContent = pad(h);
-    document.getElementById('cd-m').textContent = pad(m);
-    document.getElementById('cd-s').textContent = pad(s);
+    var diff = target - Date.now();
+    if(diff<0)diff=0;
+    document.getElementById('cd-d').textContent = Math.floor(diff/86400000);
+    document.getElementById('cd-h').textContent = pad(Math.floor(diff%86400000/3600000));
+    document.getElementById('cd-m').textContent = pad(Math.floor(diff%3600000/60000));
+    document.getElementById('cd-s').textContent = pad(Math.floor(diff%60000/1000));
   }
-  tick();
-  setInterval(tick, 1000);
+  tick();setInterval(tick,1000);
+
+  // ===== 滚动淡入动画 =====
+  var observer = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){
+        entry.target.classList.add('visible');
+        // 触发柱状图动画
+        var bars = entry.target.querySelectorAll('.bar-fill');
+        bars.forEach(function(bar){
+          var w = bar.getAttribute('data-w');
+          setTimeout(function(){bar.style.width = w+'%'},100);
+        });
+        observer.unobserve(entry.target);
+      }
+    });
+  },{threshold:0.15});
+  document.querySelectorAll('.reveal').forEach(function(el){observer.observe(el)});
+
+  // ===== Tab切换 =====
+  document.querySelectorAll('.tab-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active')});
+      document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active')});
+      btn.classList.add('active');
+      var tab = btn.getAttribute('data-tab');
+      document.getElementById('panel-'+tab).classList.add('active');
+    });
+  });
+
+  // ===== 手风琴阶段 =====
+  document.querySelectorAll('.stage-head').forEach(function(head){
+    head.addEventListener('click',function(){
+      var item = head.parentElement;
+      var body = item.querySelector('.stage-body');
+      var isOpen = item.classList.contains('open');
+      if(isOpen){
+        item.classList.remove('open');
+        body.style.maxHeight = '0';
+      }else{
+        item.classList.add('open');
+        body.style.maxHeight = body.scrollHeight + 'px';
+      }
+    });
+  });
 })();
 </script>
 
