@@ -270,6 +270,78 @@
   }
   .sign-caption { color: #6b7280; font-size: 13px; margin-top: 12px; }
 
+  /* ===== Stats ===== */
+  .stats-row {
+    display: flex;
+    gap: 16px;
+    margin-top: 32px;
+    flex-wrap: wrap;
+  }
+  .stat-item {
+    flex: 1;
+    min-width: 100px;
+    background: rgba(45,212,191,0.06);
+    border: 1px solid rgba(45,212,191,0.15);
+    border-radius: 12px;
+    padding: 24px 16px;
+    text-align: center;
+  }
+  .stat-num {
+    font-size: 28px;
+    font-weight: 700;
+    color: #2dd4bf;
+    line-height: 1.2;
+  }
+  .stat-label {
+    font-size: 13px;
+    color: #9ca3af;
+    margin-top: 8px;
+  }
+
+  /* ===== Graduation image ===== */
+  .grad-img {
+    width: 100%;
+    border-radius: 12px;
+    margin-top: 24px;
+  }
+
+  /* ===== Links card ===== */
+  .links-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid #1f2937;
+    border-radius: 16px;
+    padding: 32px 24px;
+    margin-top: 24px;
+  }
+  .link-qr-row {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+  .link-qr-item {
+    text-align: center;
+  }
+  .link-qr-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 8px;
+    background: #fff;
+    padding: 6px;
+  }
+  .link-qr-label {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #d1d5db;
+  }
+  .link-info {
+    text-align: center;
+    color: #9ca3af;
+    font-size: 15px;
+    line-height: 2;
+  }
+
   /* ===== Footer ===== */
   footer {
     text-align: center;
@@ -310,7 +382,31 @@
     <h2>这是什么？</h2>
     <div class="accent-line"></div>
     <p class="lead">一场<span class="green">完全免费</span>的芯片设计之旅，<br>从代码开始，到一颗真正的芯片结束。</p>
-    <p class="body-text">一生一芯是由中国科学院大学发起的公益性芯片培养项目。不需要你有深厚的专业背景，只要你对"计算机到底是怎么跑起来的"感到好奇，就能在这里找到答案。</p>
+    <p class="body-text">一生一芯是由中国科学院大学联合中国科学院计算技术研究所，于2019年启动的公益性芯片培养项目，对标国际MOSIS项目。不需要你有深厚的专业背景，只要你对"计算机到底是怎么跑起来的"感到好奇，就能在这里找到答案。</p>
+  </div>
+</section>
+
+<!-- 项目规模 -->
+<section>
+  <div class="container">
+    <div class="label">项目规模</div>
+    <h2>全国规模最大的芯片人才社区</h2>
+    <div class="accent-line"></div>
+    <div class="stats-row">
+      <div class="stat-item">
+        <div class="stat-num">20000+</div>
+        <div class="stat-label">累计报名人数</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">1300+</div>
+        <div class="stat-label">覆盖全球学校</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">近2000</div>
+        <div class="stat-label">培养学生人数</div>
+      </div>
+    </div>
+    <p class="body-text" style="margin-top:24px;">项目用"开源开放、独立解决问题、软硬件全栈、芯片全链条"的理念培养人才，学员毕业后输送到国内芯片企业或高校课题组，攻关卡脖子领域。</p>
   </div>
 </section>
 
@@ -370,6 +466,17 @@
         <p>完成学习路径的学员将获得项目官方认证，为你的简历添上硬核一笔。由"一生一芯"项目组颁发的结课证明，以及在 RISC-V 生态中的社区认可。</p>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- 毕业收获 -->
+<section>
+  <div class="container">
+    <div class="label">毕业收获</div>
+    <h2>你将拿到什么</h2>
+    <div class="accent-line"></div>
+    <img class="grad-img" src="assets/graduation.png" alt="毕业收获：芯片、板卡、认证证书">
+    <p class="body-text" style="margin-top:16px;">完成学习路径后，你将获得：亲手设计的流片芯片实物、开发板卡、以及由"一生一芯"项目组颁发的等级认证证书，包含能力水平认证等级和助教评语。</p>
   </div>
 </section>
 
@@ -441,6 +548,31 @@
       </div>
       <img class="sign-img" src="assets/sign-sheet.png" alt="签领表示例">
       <p class="sign-caption">这是当天使用的签领表样式，提前填好前三列，到场后直接在"签字"栏签名就行。</p>
+    </div>
+  </div>
+</section>
+
+<!-- 官方链接 -->
+<section>
+  <div class="container">
+    <div class="label">联系我们</div>
+    <h2>了解更多</h2>
+    <div class="accent-line"></div>
+    <div class="links-card">
+      <div class="link-qr-row">
+        <div class="link-qr-item">
+          <img class="link-qr-img" src="assets/qr-official.png" alt="官网二维码">
+          <div class="link-qr-label">官网</div>
+        </div>
+        <div class="link-qr-item">
+          <img class="link-qr-img" src="assets/qr-group.png" alt="高校交流群二维码">
+          <div class="link-qr-label">高校交流群</div>
+        </div>
+      </div>
+      <div class="link-info">
+        <p>🌐 官网网址：<a href="https://ysyx.org" target="_blank" style="color:#2dd4bf;">ysyx.org</a></p>
+        <p>📧 联系邮箱：ysyx@bosc.ac.cn</p>
+      </div>
     </div>
   </div>
 </section>
