@@ -165,9 +165,19 @@ footer .f3{color:#6b7280;font-size:14px}
 /* ===== 滚动动画 ===== */
 .reveal{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s ease}
 .reveal.visible{opacity:1;transform:translateY(0)}
+
+/* ===== 顶部通知条 ===== */
+.top-notice{background:linear-gradient(90deg,rgba(45,212,191,.12),rgba(96,165,250,.12));border-bottom:1px solid rgba(45,212,191,.2);padding:10px 24px;text-align:center;font-size:14px;color:#a7f3d0;position:sticky;top:0;z-index:100;backdrop-filter:blur(8px)}
+.top-notice .notice-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#2dd4bf;margin-right:8px;animation:pulse-dot 2s ease-in-out infinite}
+.top-notice a{color:#2dd4bf;text-decoration:none;font-weight:600}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
 </style>
 </head>
 <body>
+
+<div class="top-notice">
+  <span class="notice-dot"></span>本界面持续更新中，欢迎常回来看看 · 想报名的同学可在页面下方扫码加入校内交流群
+</div>
 
 <!-- ===== Hero ===== -->
 <div class="hero" id="hero">
