@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>签到名单 · 管理</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; background: #0d1117; color: #e6edf3; padding: 20px; }
+h1 { font-size: 20px; color: #3fb950; margin-bottom: 16px; }
+.stats { font-size: 14px; color: #7d8590; margin-bottom: 16px; }
+.stats b { color: #e6edf3; font-size: 18px; }
+.controls { margin-bottom: 16px; display: flex; gap: 10px; flex-wrap: wrap; }
+button { padding: 10px 18px; border-radius: 8px; border: 1px solid #30363d; background: #21262d; color: #e6edf3; cursor: pointer; font-size: 14px; }
+button:hover { background: #30363d; }
+button.primary { background: #238636; border-color: #238636; color: #fff; }
+#nameList { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 16px; min-height: 200px; line-height: 2; font-size: 15px; }
+#rawText { width: 100%; height: 150px; background: #0d1117; border: 1px solid #30363d; border-radius: 8px; color: #3fb950; padding: 12px; font-size: 14px; margin-top: 12px; font-family: monospace; }
+.refresh-note { font-size: 12px; color: #484f58; margin-top: 12px; }
+</style>
+</head>
+<body>
+<h1>签到名单（管理页）</h1>
+<div class="stats">已签到 <b id="count">0</b> 人</div>
+<div class="controls">
+  <button class="primary" onclick="copyNames()">复制名单</button>
+  <button onclick="refresh()">刷新</button>
+</div>
+<div id="nameList">加载中...</div>
+<textarea id="rawText" readonly placeholder="复制上面的名单后，粘贴到本地抽奖页"></textarea>
+<div class="refresh-note">每 3 秒自动刷新 · 数据来源：npoint.io</div>
+
+<script>
+var NPOINT_URL = "https://api.npoint.io/bfc7f456872d12528f08";
+var names = [];
+
+function refresh() {
+  fetch(NPOINT_URL + "?t=" + Date.now(), { cache: "no-store" })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      names = Array.isArray(data.names) ? data.names.filter(Boolean) : [];
+      render();
+    })
+    .catch(function(e) {
+      document.getElementById("nameList").textContent = "加载失败: " + e.message;
+    });
+}
+
+function render() {
+  document.getElementById("count").textContent = names.length;
+  var html = "";
+  names.forEach(function(n, i) {
+    html += "<div>" + (i+1) + ". " + n + "</div>";
+  });
+  document.getElementById("nameList").innerHTML = html || "暂无签到记录";
+  document.getElementById("rawText").value = names.join("\n");
+}
+
+function copyNames() {
+  var text = names.join("\n");
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(function() {
+      alert("已复制 " + names.length + " 个名字，粘贴到本地抽奖页即可");
+    });
+  } else {
+    document.getElementById("rawText").select();
+    document.execCommand("copy");
+    alert("已复制");
+  }
+}
+
+refresh();
+setInterval(refresh, 3000);
+</script>
+</body>
+</html>
