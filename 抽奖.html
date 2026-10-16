@@ -139,7 +139,7 @@ function resetLocal() {
 }
 
 function refreshNames() {
-  fetch(NPOINT_URL)
+  fetch(NPOINT_URL + "?t=" + Date.now(), {cache: "no-store"})
     .then(r => r.json())
     .then(data => {
       participants = (data.names || []).filter(Boolean);
