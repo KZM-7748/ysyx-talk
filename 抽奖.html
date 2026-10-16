@@ -262,9 +262,9 @@ function syncWinnersToCloud() {
   fetch(NPOINT_URL + "?t=" + Date.now(), { cache: "no-store" })
     .then(function (r) { return r.json(); })
     .then(function (data) {
-      var names = (Array.isArray(data.names) && data.names.length > 0)
-        ? data.names
-        : (participants.length ? participants : []);
+      // Preserve whatever names are in the cloud; never overwrite with empty
+      var names = Array.isArray(data.names) ? data.names : [];
+      if (names.length === 0 && participants.length > 0) names = participants.slice();
       return fetch(NPOINT_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -461,7 +461,7 @@ setInterval(function () {
   }
   tryBecomeMaster();            // 持续确认主控身份
 }, 1500);
-setInterval(function () { if (isMaster) syncWinnersToCloud(); }, 3000);
+// auto-sync removed: only write on actual draw to avoid overwriting phone sign-ins
 window.addEventListener('beforeunload', function () {
   var lock = readLock();
   if (lock && lock.id === CLIENT_ID) { try { localStorage.removeItem(LOCK_KEY); } catch (e) {} }
