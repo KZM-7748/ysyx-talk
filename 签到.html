@@ -66,14 +66,20 @@ function submitName() {
   btn.disabled = true;
   btn.textContent = '提交中...';
 
-  // 用图片加载方式发送GET请求，绕过CORS
-  const img = new Image();
-  img.onload = () => showSuccess(name);
-  img.onerror = () => showSuccess(name); // 即使加载失败也算成功（webhook已记录）
-  img.src = WEBHOOK + "?name=" + encodeURIComponent(name) + "&t=" + Date.now();
-
-  // 兜底：1.5秒后无论如何都显示成功
-  setTimeout(() => showSuccess(name), 1500);
+  // 主路径：POST（webhook已开启CORS）
+  fetch(WEBHOOK, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({name: name})
+  }).then(() => showSuccess(name))
+    .catch(() => {
+      // 兜底：图片GET方式
+      const img = new Image();
+      img.onload = () => showSuccess(name);
+      img.onerror = () => showSuccess(name);
+      img.src = WEBHOOK + "?name=" + encodeURIComponent(name) + "&t=" + Date.now();
+      setTimeout(() => showSuccess(name), 1500);
+    });
 }
 
 function showSuccess(name) {

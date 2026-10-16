@@ -46,6 +46,27 @@ body {
   color: #6b7280; max-width: 280px; max-height: 180px; overflow-y: auto;
 }
 .history b { color: #fbbf24; }
+.admin-toggle {
+  position: fixed; top: 16px; right: 16px;
+  background: rgba(255,255,255,0.1); border: 1px solid #374151;
+  color: #9ca3af; padding: 6px 14px; border-radius: 8px;
+  cursor: pointer; font-size: 12px; z-index: 99;
+}
+.admin-panel {
+  position: fixed; top: 50px; right: 16px;
+  background: rgba(17,24,39,0.97); border: 1px solid #374151;
+  border-radius: 12px; padding: 18px; width: 320px; z-index: 100; display: none;
+}
+.admin-panel.show { display: block; }
+.admin-panel h3 { font-size: 15px; color: #2dd4bf; margin-bottom: 10px; }
+.admin-panel p.note { font-size: 11px; color: #6b7280; line-height: 1.6; margin-top: 6px; }
+.admin-panel .row { display: flex; gap: 8px; margin-top: 12px; }
+.admin-panel button {
+  flex: 1; padding: 8px; border: none; border-radius: 6px;
+  font-weight: 700; cursor: pointer; font-size: 12px;
+}
+.btn-primary { background: #2dd4bf; color: #0b0f1a; }
+.btn-gray { background: #374151; color: #9ca3af; }
 .refresh-hint { position: fixed; top: 16px; left: 16px; font-size: 12px; color: #4b5563; }
 .refresh-hint button {
   background: none; border: none; color: #2dd4bf; cursor: pointer;
@@ -63,7 +84,18 @@ body {
 
 <div class="refresh-hint">
   <button onclick="refreshNames()">刷新名单</button>
-  <span class="auto-refresh" id="autoRefresh">自动刷新已开启</span>
+  <span class="auto-refresh">自动刷新已开启</span>
+</div>
+
+<button class="admin-toggle" onclick="document.querySelector('.admin-panel').classList.toggle('show')">设置</button>
+<div class="admin-panel">
+  <h3>抽奖设置</h3>
+  <p class="note">奖品固定为：雨伞 1、帆布袋 3、钥匙扣 5、贴纸 5（共 14 份）。如需重置本地开奖状态，点下方按钮。</p>
+  <p class="note">注意：签到名单的重置请运行文件夹里的「重置.bat」，并先在同步脚本窗口确认。</p>
+  <div class="row">
+    <button class="btn-primary" onclick="resetLocal()">重置开奖状态</button>
+    <button class="btn-gray" onclick="closePanel()">关闭</button>
+  </div>
 </div>
 
 <div class="stage">
@@ -76,41 +108,45 @@ body {
 <div class="history" id="history"></div>
 
 <script>
-const WEBHOOK_TOKEN = "6e2a71b3-5582-4315-be38-390f9f541ddb";
-const REQUESTS_URL = "https://webhook.site/token/" + WEBHOOK_TOKEN + "/requests?sorting=newest&per_page=200";
+const NPOINT_URL = "https://api.npoint.io/bfc7f456872d12528f08";
 
 let participants = [];
 let prizes = [];
 let drawn = new Set();
 
-// 默认奖品：雨伞1、帆布袋3、钥匙扣5、贴纸5
+// 固定奖品，打乱顺序
 function initPrizes() {
   const defaults = [["雨伞",1],["帆布袋",3],["钥匙扣",5],["贴纸",5]];
   prizes = [];
   defaults.forEach(([name, count]) => {
     for (let i = 0; i < count; i++) prizes.push(name);
   });
-  // 打乱奖品顺序
   prizes = prizes.sort(() => Math.random() - 0.5);
 }
 
-function refreshNames() {
-  fetch(REQUESTS_URL)
-    .then(r => r.json())
-    .then(data => parseNames(data))
-    .catch(() => {});
+function closePanel() {
+  document.querySelector('.admin-panel').classList.remove('show');
 }
 
-function parseNames(data) {
-  const names = (data.data || [])
-    .map(item => {
-      if (item.query && item.query.name) return item.query.name;
-      try { return JSON.parse(item.content).name; } catch(e) { return null; }
-    })
-    .filter(Boolean);
-  participants = [...new Set(names)];
-  participants = participants.sort(() => Math.random() - 0.5);
+function resetLocal() {
+  initPrizes();
+  drawn = new Set();
+  document.getElementById('resultArea').innerHTML = '';
+  document.getElementById('history').innerHTML = '';
+  updatePrizeBar();
   updateCount();
+  closePanel();
+}
+
+function refreshNames() {
+  fetch(NPOINT_URL)
+    .then(r => r.json())
+    .then(data => {
+      participants = (data.names || []).filter(Boolean);
+      participants = participants.sort(() => Math.random() - 0.5);
+      updateCount();
+    })
+    .catch(() => {});
 }
 
 function updateCount() {
@@ -148,7 +184,7 @@ function startDraw() {
     if (++count > 25) {
       clearInterval(timer);
       const winner = available[Math.floor(Math.random() * available.length)];
-      const prize = prizes.pop(); // 从尾部取，奖品已打乱
+      const prize = prizes.pop();
       drawn.add(winner);
       document.getElementById('displayName').textContent = '';
       document.getElementById('resultArea').innerHTML =
@@ -165,7 +201,7 @@ initPrizes();
 updatePrizeBar();
 updateCount();
 refreshNames();
-setInterval(refreshNames, 5000);
+setInterval(refreshNames, 3000);
 </script>
 </body>
 </html>
