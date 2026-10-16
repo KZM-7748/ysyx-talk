@@ -78,7 +78,6 @@ body {
 <script>
 const WEBHOOK_TOKEN = "6e2a71b3-5582-4315-be38-390f9f541ddb";
 const REQUESTS_URL = "https://webhook.site/token/" + WEBHOOK_TOKEN + "/requests?sorting=newest&per_page=200";
-const CORS_PROXY = "https://api.allorigins.win/raw?url=";
 
 let participants = [];
 let prizes = [];
@@ -96,16 +95,10 @@ function initPrizes() {
 }
 
 function refreshNames() {
-  // 先试直连，不行再走CORS代理
   fetch(REQUESTS_URL)
     .then(r => r.json())
     .then(data => parseNames(data))
-    .catch(() => {
-      fetch(CORS_PROXY + encodeURIComponent(REQUESTS_URL))
-        .then(r => r.json())
-        .then(data => parseNames(data))
-        .catch(() => {});
-    });
+    .catch(() => {});
 }
 
 function parseNames(data) {
