@@ -12,10 +12,11 @@ body {
 }
 .header { text-align: center; padding: 24px 0 8px; }
 .header h1 { font-size: 28px; color: #2dd4bf; letter-spacing: 4px; }
-.header .count { font-size: 14px; color: #6b7280; margin-top: 6px; }
+.header .count { font-size: 15px; color: #cbd5e1; margin-top: 8px; }
+.header .sub { font-size: 13px; color: #fbbf24; margin-top: 6px; }
 .stage {
   display: flex; flex-direction: column;
-  align-items: center; justify-content: center; height: calc(100vh - 100px);
+  align-items: center; justify-content: center; height: calc(100vh - 110px);
 }
 .rolling-name {
   font-size: 72px; font-weight: 900; color: #fff;
@@ -43,8 +44,9 @@ body {
 .prize-bar b { color: #2dd4bf; margin-left: 4px; }
 .history {
   position: fixed; bottom: 60px; left: 16px; font-size: 12px;
-  color: #6b7280; max-width: 280px; max-height: 180px; overflow-y: auto;
+  color: #9ca3af; max-width: 280px; max-height: 180px; overflow-y: auto;
 }
+.history .h-row { margin-bottom: 3px; }
 .history b { color: #fbbf24; }
 .admin-toggle {
   position: fixed; top: 16px; right: 16px;
@@ -55,11 +57,11 @@ body {
 .admin-panel {
   position: fixed; top: 50px; right: 16px;
   background: rgba(17,24,39,0.97); border: 1px solid #374151;
-  border-radius: 12px; padding: 18px; width: 320px; z-index: 100; display: none;
+  border-radius: 12px; padding: 18px; width: 340px; z-index: 100; display: none;
 }
 .admin-panel.show { display: block; }
 .admin-panel h3 { font-size: 15px; color: #2dd4bf; margin-bottom: 10px; }
-.admin-panel p.note { font-size: 11px; color: #6b7280; line-height: 1.6; margin-top: 6px; }
+.admin-panel p.note { font-size: 11px; color: #9ca3af; line-height: 1.6; margin-top: 6px; }
 .admin-panel .row { display: flex; gap: 8px; margin-top: 12px; }
 .admin-panel button {
   flex: 1; padding: 8px; border: none; border-radius: 6px;
@@ -67,34 +69,51 @@ body {
 }
 .btn-primary { background: #2dd4bf; color: #0b0f1a; }
 .btn-gray { background: #374151; color: #9ca3af; }
-.refresh-hint { position: fixed; top: 16px; left: 16px; font-size: 12px; color: #4b5563; }
+.refresh-hint { position: fixed; top: 16px; left: 16px; font-size: 12px; color: #9ca3af; }
 .refresh-hint button {
   background: none; border: none; color: #2dd4bf; cursor: pointer;
   text-decoration: underline; font-size: 12px;
 }
 .auto-refresh { color: #2dd4bf; margin-left: 8px; font-size: 11px; }
+.lock-banner {
+  display: none; text-align: center; padding: 10px; font-size: 14px;
+  background: rgba(245,158,11,.15); color: #fbbf24; border-bottom: 1px solid rgba(251,191,36,.3);
+}
+.role-tag { display:inline-block; padding:2px 10px; border-radius:999px; font-size:11px; margin-left:6px; }
+.role-master { background: rgba(45,212,191,.18); color:#2dd4bf; }
+.role-viewer { background: rgba(245,158,11,.18); color:#fbbf24; }
 </style>
 </head>
 <body>
 
+<div class="lock-banner" id="lockBanner">
+  另一个窗口已是“抽奖主控”，本页面仅用于观看，不会重复开奖。
+</div>
+
 <div class="header">
   <h1>一生一芯 · 现场抽奖</h1>
   <div class="count" id="countText">加载中...</div>
+  <div class="sub" id="subText"></div>
 </div>
 
 <div class="refresh-hint">
   <button onclick="refreshNames()">刷新名单</button>
   <span class="auto-refresh">自动刷新已开启</span>
+  <span id="roleTag" class="role-tag role-master">主控</span>
 </div>
 
-<button class="admin-toggle" onclick="document.querySelector('.admin-panel').classList.toggle('show')">设置</button>
-<div class="admin-panel">
+<button class="admin-toggle" onclick="togglePanel()">设置</button>
+<div class="admin-panel" id="adminPanel">
   <h3>抽奖设置</h3>
-  <p class="note">奖品固定为：雨伞 1、帆布袋 3、钥匙扣 5、贴纸 5（共 14 份）。如需重置本地开奖状态，点下方按钮。</p>
-  <p class="note">注意：签到名单的重置请运行文件夹里的「重置.bat」，并先在同步脚本窗口确认。</p>
-  <div class="row">
-    <button class="btn-primary" onclick="resetLocal()">重置开奖状态</button>
-    <button class="btn-gray" onclick="closePanel()">关闭</button>
+  <p class=”note”>奖品固定：雨伞 1、帆布袋 3、钥匙扣 5、贴纸 5（共 14 份）。</p>
+  <p class=”note”>手机扫码签到后，名单约 3 秒内自动出现在本页。请勿在多台设备同时开奖。</p>
+  <div class=”row”>
+    <button class=”btn-primary” onclick=”exportWinners()”>导出中奖名单</button>
+    <button class=”btn-gray” onclick=”closePanel()”>关闭</button>
+  </div>
+  <div class=”row”>
+    <button class=”btn-gray” onclick=”resetDraw()”>只清开奖记录</button>
+    <button class=”btn-gray” onclick=”resetAll()”>清空名单+重开</button>
   </div>
 </div>
 
@@ -108,100 +127,345 @@ body {
 <div class="history" id="history"></div>
 
 <script>
-const NPOINT_URL = "https://api.npoint.io/bfc7f456872d12528f08";
+/* ============================================================
+   配置
+   ============================================================ */
+var NPOINT_URL = "https://api.npoint.io/bfc7f456872d12528f08";
+var STATE_KEY = "ysyx_lottery_state_v2";
+var LOCK_KEY = "ysyx_master_lock_v2";
+var CLIENT_ID = "c" + Date.now() + "-" + Math.floor(Math.random() * 1e6);
+var PRIZE_DEFS = [["雨伞",1],["帆布袋",3],["钥匙扣",5],["贴纸",5]];
+var TOTAL_PRIZES = 14;
 
-let participants = [];
-let prizes = [];
-let drawn = new Set();
+/* ============================================================
+   状态：中奖结果持久化（localStorage + 云端）
+   state = { winners: [ {name, prize, at} ] }
+   剩余奖品完全由 winners 推算，可跨设备恢复
+   ============================================================ */
+var state = { winners: [] };
+var participants = [];        // 当前有效名单（空名单时不覆盖）
+var rolling = false;
+var isMaster = false;
 
-// 固定奖品，打乱顺序
-function initPrizes() {
-  const defaults = [["雨伞",1],["帆布袋",3],["钥匙扣",5],["贴纸",5]];
-  prizes = [];
-  defaults.forEach(([name, count]) => {
-    for (let i = 0; i < count; i++) prizes.push(name);
+function loadState() {
+  try {
+    var raw = localStorage.getItem(STATE_KEY);
+    if (raw) { var s = JSON.parse(raw); if (s && s.winners) { state = s; } }
+  } catch (e) {}
+}
+function saveState() {
+  try { localStorage.setItem(STATE_KEY, JSON.stringify(state)); } catch (e) {}
+}
+
+function remainingPrizeList() {
+  var counts = {};
+  PRIZE_DEFS.forEach(function (p) { counts[p[0]] = p[1]; });
+  state.winners.forEach(function (w) { if (counts[w.prize] > 0) counts[w.prize]--; });
+  var list = [];
+  Object.keys(counts).forEach(function (name) {
+    for (var i = 0; i < counts[name]; i++) list.push(name);
   });
-  prizes = prizes.sort(() => Math.random() - 0.5);
+  return list;
+}
+function drawnNames() {
+  var set = Object.create(null);
+  state.winners.forEach(function (w) { set[w.name] = true; });
+  return set;
 }
 
-function closePanel() {
-  document.querySelector('.admin-panel').classList.remove('show');
+function shuffle(arr) {              // Fisher-Yates 均匀洗牌
+  for (var i = arr.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = arr[i]; arr[i] = arr[j]; arr[j] = t;
+  }
+  return arr;
 }
 
-function resetLocal() {
-  initPrizes();
-  drawn = new Set();
-  document.getElementById('resultArea').innerHTML = '';
-  document.getElementById('history').innerHTML = '';
-  updatePrizeBar();
+/* ============================================================
+   主控锁：同浏览器只允许一个标签开奖
+   ============================================================ */
+function readLock() {
+  try { var raw = localStorage.getItem(LOCK_KEY); if (!raw) return null; return JSON.parse(raw); }
+  catch (e) { return null; }
+}
+function writeLock() {
+  try { localStorage.setItem(LOCK_KEY, JSON.stringify({ id: CLIENT_ID, ts: Date.now() })); } catch (e) {}
+}
+function lockIsFresh(lock) {
+  return lock && lock.id && (Date.now() - Number(lock.ts || 0)) < 3500;
+}
+function tryBecomeMaster() {
+  var lock = readLock();
+  if (!lockIsFresh(lock)) { writeLock(); lock = readLock(); }
+  isMaster = lock && lock.id === CLIENT_ID;
+  applyRole();
+}
+function applyRole() {
+  var banner = document.getElementById('lockBanner');
+  var tag = document.getElementById('roleTag');
+  var btn = document.getElementById('drawBtn');
+  if (isMaster) {
+    banner.style.display = 'none';
+    tag.textContent = '主控'; tag.className = 'role-tag role-master';
+    btn.disabled = false;
+  } else {
+    banner.style.display = 'block';
+    tag.textContent = '只读'; tag.className = 'role-tag role-viewer';
+    btn.disabled = true;
+  }
   updateCount();
-  closePanel();
 }
 
+var channel = null;
+try {
+  channel = new BroadcastChannel('ysyx-lottery-lock');
+  channel.onmessage = function (e) {
+    var msg = e.data || {};
+    if (msg.type === 'query' && isMaster) {
+      try { channel.postMessage({ type: 'alive', id: CLIENT_ID }); } catch (err) {}
+    } else if (msg.type === 'alive' && msg.id !== CLIENT_ID) {
+      if (isMaster) { tryBecomeMaster(); }   // 已有主控，让贤
+      else { isMaster = false; applyRole(); }
+    }
+  };
+  try { channel.postMessage({ type: 'query' }); } catch (e) {}
+} catch (e) { channel = null; }
+
+/* ============================================================
+   名单 / 云端
+   ============================================================ */
 function refreshNames() {
-  fetch(NPOINT_URL + "?t=" + Date.now(), {cache: "no-store"})
-    .then(r => r.json())
-    .then(data => {
-      participants = (data.names || []).filter(Boolean);
-      participants = participants.sort(() => Math.random() - 0.5);
+  fetch(NPOINT_URL + "?t=" + Date.now(), { cache: "no-store" })
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      var names = Array.isArray(data.names) ? data.names.filter(Boolean) : [];
+      // 空名单保护：同步脚本偶发限流返回空时，不覆盖上一份有效名单
+      if (names.length > 0) {
+        participants = shuffle(names.slice());
+      }
+      // 云端开奖结果恢复（本机首次打开/换电脑时）
+      if (data.winners && Array.isArray(data.winners) && data.winners.length > 0) {
+        if (state.winners.length === 0) {
+          state.winners = data.winners;
+          saveState();
+          renderAll();
+        }
+      }
       updateCount();
     })
-    .catch(() => {});
+    .catch(function () {});
 }
 
+// 主控把开奖结果写回云端（读-改-写：保留 names，只更新 winners）
+function syncWinnersToCloud() {
+  if (!isMaster) return;
+  fetch(NPOINT_URL + "?t=" + Date.now(), { cache: "no-store" })
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      var names = (Array.isArray(data.names) && data.names.length > 0)
+        ? data.names
+        : (participants.length ? participants : []);
+      return fetch(NPOINT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ names: names, winners: state.winners })
+      });
+    })
+    .catch(function () {});
+}
+
+/* ============================================================
+   UI 渲染（全部用 textContent，防止姓名注入）
+   ============================================================ */
+function el(tag, cls, text) {
+  var e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text != null) e.textContent = text;
+  return e;
+}
 function updateCount() {
-  document.getElementById('countText').textContent =
-    `已签到 ${participants.length} 人 · 奖品 ${prizes.length} 份`;
-  if (!document.getElementById('resultArea').innerHTML) {
-    document.getElementById('displayName').textContent =
-      participants.length > 0 ? '准备就绪' : '等待签到...';
+  var remaining = remainingPrizeList().length;
+  var drawn = state.winners.length;
+  var txt = "已签到 " + participants.length + " 人 · 已抽 " + drawn + " 人 · 奖品剩余 " + remaining + " 份";
+  document.getElementById('countText').textContent = txt;
+  var sub = document.getElementById('subText');
+  if (participants.length > TOTAL_PRIZES) {
+    sub.textContent = "共 " + TOTAL_PRIZES + " 份奖品，将有 " + (participants.length - TOTAL_PRIZES) + " 人未中奖（公平随机，不重复）";
+  } else if (participants.length > 0 && participants.length < TOTAL_PRIZES) {
+    sub.textContent = "签到人数不足 14，在场每人都可中奖，剩余 " + (TOTAL_PRIZES - participants.length) + " 份奖品留待补签";
+  } else {
+    sub.textContent = "";
   }
+  if (!document.getElementById('resultArea').hasChildNodes() && !rolling) {
+    var d = document.getElementById('displayName');
+    if (participants.length > 0) { d.textContent = drawn >= participants.length ? '在场人员已抽完' : '准备就绪'; }
+    else { d.textContent = '等待签到...'; }
+  }
+  updatePrizeBar();
 }
-
 function updatePrizeBar() {
-  const remaining = {};
-  prizes.forEach(p => remaining[p] = (remaining[p] || 0) + 1);
-  let html = '';
-  for (const [name, count] of Object.entries(remaining)) {
-    html += `<span>${name}<b>${count}</b></span>`;
+  var counts = {};
+  remainingPrizeList().forEach(function (p) { counts[p] = (counts[p] || 0) + 1; });
+  var bar = document.getElementById('prizeBar');
+  bar.innerHTML = '';
+  PRIZE_DEFS.forEach(function (def) {
+    var n = counts[def[0]] || 0;
+    var span = el('span', null, def[0]);
+    var b = el('b', null, String(n));
+    span.appendChild(b);
+    bar.appendChild(span);
+  });
+}
+function renderHistory() {
+  var box = document.getElementById('history');
+  box.innerHTML = '';
+  for (var i = state.winners.length - 1; i >= 0; i--) {
+    var w = state.winners[i];
+    var row = el('div', 'h-row');
+    row.appendChild(el('b', null, w.name));
+    row.appendChild(el('span', null, ' — ' + w.prize));
+    box.appendChild(row);
   }
-  document.getElementById('prizeBar').innerHTML = html;
+}
+function renderAll() {
+  renderHistory();
+  updatePrizeBar();
+  updateCount();
 }
 
+/* ============================================================
+   抽奖
+   ============================================================ */
 function startDraw() {
-  const available = participants.filter(n => !drawn.has(n));
-  if (available.length === 0) {
-    document.getElementById('displayName').textContent = participants.length > 0 ? '所有人都抽过了' : '等待签到...';
+  if (!isMaster) { alert('本页面为只读，开奖请在“主控”窗口操作'); return; }
+  if (rolling) return;
+  var dn = drawnNames();
+  var available = participants.filter(function (n) { return !dn[n]; });
+  var prizeList = remainingPrizeList();
+
+  if (prizeList.length === 0) {
+    document.getElementById('displayName').textContent = '14 份奖品已全部抽完';
     return;
   }
-  if (prizes.length === 0) { document.getElementById('displayName').textContent = '奖品已抽完'; return; }
-  const btn = document.getElementById('drawBtn');
+  if (available.length === 0) {
+    document.getElementById('displayName').textContent =
+      participants.length > 0 ? '在场签到人员都已抽过' : '等待签到...';
+    return;
+  }
+
+  rolling = true;
+  var btn = document.getElementById('drawBtn');
   btn.disabled = true;
   document.getElementById('resultArea').innerHTML = '';
-  let count = 0;
-  const timer = setInterval(() => {
+  var count = 0;
+  var timer = setInterval(function () {
     document.getElementById('displayName').textContent = available[Math.floor(Math.random() * available.length)];
     if (++count > 25) {
       clearInterval(timer);
-      const winner = available[Math.floor(Math.random() * available.length)];
-      const prize = prizes.pop();
-      drawn.add(winner);
+      var winner = available[Math.floor(Math.random() * available.length)];
+      var prize = prizeList[Math.floor(Math.random() * prizeList.length)];
+      state.winners.push({ name: winner, prize: prize, at: Date.now() });
+      saveState();
+      syncWinnersToCloud();
+      rolling = false;
       document.getElementById('displayName').textContent = '';
-      document.getElementById('resultArea').innerHTML =
-        `<div class="result"><div class="winner">${winner}</div><div class="prize">获得 ${prize}</div></div>`;
-      document.getElementById('history').innerHTML = `<div><b>${winner}</b> — ${prize}</div>` + document.getElementById('history').innerHTML;
-      updateCount(); updatePrizeBar();
-      btn.disabled = false;
+
+      var result = el('div', 'result');
+      result.appendChild(el('div', 'winner', winner));
+      result.appendChild(el('div', 'prize', '获得 ' + prize));
+      document.getElementById('resultArea').appendChild(result);
+      renderAll();
+      if (isMaster) btn.disabled = false;
     }
   }, 60);
 }
 
-// 初始化
-initPrizes();
-updatePrizeBar();
-updateCount();
+/* ============================================================
+   管理面板
+   ============================================================ */
+function togglePanel() { document.getElementById('adminPanel').classList.toggle('show'); }
+function closePanel() { document.getElementById('adminPanel').classList.remove('show'); }
+
+function resetDraw() {
+  if (!isMaster) { alert('只有主控窗口可以重置'); return; }
+  if (!confirm('确定要清空本场所有开奖记录并重新开始吗？\n（签到名单如需清空，请另外运行「重置.bat」）')) return;
+  state.winners = [];
+  saveState();
+  document.getElementById('resultArea').innerHTML = '';
+  renderAll();
+  // 云端 winners 清空（保留 names）
+  fetch(NPOINT_URL + "?t=" + Date.now(), { cache: "no-store" })
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      var names = (Array.isArray(data.names) && data.names.length > 0) ? data.names : participants;
+      return fetch(NPOINT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ names: names, winners: [] })
+      });
+    })
+    .catch(function () {});
+  closePanel();
+}
+
+function resetAll() {
+  if (!isMaster) { alert('只有主控窗口可以重置'); return; }
+  if (!confirm('确定要清空所有签到名单和开奖记录吗？\n（现场签到的同学需要重新扫码）')) return;
+  state.winners = [];
+  participants = [];
+  saveState();
+  document.getElementById('resultArea').innerHTML = '';
+  renderAll();
+  fetch(NPOINT_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ names: [], winners: [] })
+  }).catch(function () {});
+  closePanel();
+}
+
+function exportWinners() {
+  if (state.winners.length === 0) { alert('暂时还没有中奖记录'); return; }
+  var lines = ['一生一芯 · 中奖名单（共 ' + state.winners.length + ' 人）', ''];
+  state.winners.forEach(function (w, i) {
+    lines.push((i + 1) + '. ' + w.name + ' — ' + w.prize);
+  });
+  var text = lines.join('\n');
+  // 优先下载文件
+  try {
+    var blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = '一生一芯-中奖名单.txt';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  } catch (e) {}
+  // 同时复制到剪贴板
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text);
+  } catch (e) {}
+  alert('中奖名单已导出（文件下载 + 已复制到剪贴板）');
+}
+
+/* ============================================================
+   初始化 + 定时器
+   ============================================================ */
+loadState();
+renderAll();
+tryBecomeMaster();
 refreshNames();
 setInterval(refreshNames, 3000);
+setInterval(function () {
+  if (isMaster) {
+    writeLock();                 // 主控心跳
+    // 主控定期把开奖结果同步云端（自愈，约每 3 秒）
+  }
+  tryBecomeMaster();            // 持续确认主控身份
+}, 1500);
+setInterval(function () { if (isMaster) syncWinnersToCloud(); }, 3000);
+window.addEventListener('beforeunload', function () {
+  var lock = readLock();
+  if (lock && lock.id === CLIENT_ID) { try { localStorage.removeItem(LOCK_KEY); } catch (e) {} }
+});
 </script>
 </body>
 </html>

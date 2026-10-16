@@ -45,7 +45,7 @@ button:disabled { opacity: 0.5; }
   <p class="subtitle">输入你的姓名，参与现场抽奖</p>
   <div class="input-wrap">
     <input type="text" id="nameInput" placeholder="请输入姓名" maxlength="20" autocomplete="off">
-    <button onclick="submitName()">签到并参与抽奖</button>
+    <button id="submitBtn" onclick="submitName()">签到并参与抽奖</button>
   </div>
 </div>
 <div class="success" id="successView">
@@ -57,36 +57,88 @@ button:disabled { opacity: 0.5; }
 <div class="footer">计算机工程学院 · 一生一芯校园宣讲会</div>
 
 <script>
-const WEBHOOK = "https://webhook.site/07c078e9-36cc-4d4b-ba4e-bf603d959f34";
+var NPOINT_URL = "https://api.npoint.io/bfc7f456872d12528f08";
+
+function cleanName(raw) {
+  var s = String(raw == null ? "" : raw);
+  s = s.replace(/\s+/g, " ").trim();
+  s = s.replace(/[<>()"'`\\]/g, "");
+  s = s.replace(/[\x00-\x1f\x7f]/g, "");
+  return s.slice(0, 20);
+}
 
 function submitName() {
-  const name = document.getElementById('nameInput').value.trim();
-  if (!name) { alert('请输入姓名'); return; }
-  const btn = document.querySelector('button');
+  var input = document.getElementById('nameInput');
+  var name = cleanName(input.value);
+  if (!name) { alert('请输入有效的姓名'); return; }
+  var btn = document.getElementById('submitBtn');
   btn.disabled = true;
   btn.textContent = '提交中...';
 
-  // 主路径：图片GET（无需CORS，最可靠）
-  const img = new Image();
-  let done = false;
-  const finish = () => { if (!done) { done = true; showSuccess(name); } };
-  img.onload = finish;
-  img.onerror = finish;
-  img.src = WEBHOOK + "?name=" + encodeURIComponent(name) + "&t=" + Date.now();
-  setTimeout(finish, 1800);
-
-  // 同时尝试POST（作为补充记录）
-  fetch(WEBHOOK, {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({name: name})
-  }).catch(() => {});
+  // 直写 npoint.io：GET 当前名单 → 追加 → POST 回写
+  doSignIn(name, 0);
 }
 
-function showSuccess(name) {
+function doSignIn(name, retry) {
+  fetch(NPOINT_URL + "?t=" + Date.now(), { cache: "no-store" })
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      var names = Array.isArray(data.names) ? data.names.filter(Boolean) : [];
+      var winners = Array.isArray(data.winners) ? data.winners : [];
+
+      // 重复签到检测
+      for (var i = 0; i < names.length; i++) {
+        if (names[i] === name) {
+          showSuccess(name, '你已签到过，请勿重复提交');
+          return;
+        }
+      }
+
+      names.push(name);
+
+      return fetch(NPOINT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ names: names, winners: winners })
+      }).then(function () {
+        showSuccess(name, null);
+      });
+    })
+    .catch(function (err) {
+      // 网络抖动/并发冲突，最多重试 2 次
+      if (retry < 2) {
+        setTimeout(function () { doSignIn(name, retry + 1); }, 600);
+      } else {
+        // 最终失败：仍然提示成功（避免阻塞签到流），后台再试一次
+        showSuccess(name, null);
+        setTimeout(function () {
+          fetch(NPOINT_URL + "?t=" + Date.now(), { cache: "no-store" })
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+              var names = Array.isArray(data.names) ? data.names.filter(Boolean) : [];
+              var winners = Array.isArray(data.winners) ? data.winners : [];
+              if (names.indexOf(name) === -1) {
+                names.push(name);
+                fetch(NPOINT_URL, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ names: names, winners: winners })
+                });
+              }
+            });
+        }, 1500);
+      }
+    });
+}
+
+function showSuccess(name, extraMsg) {
   document.getElementById('formView').style.display = 'none';
   document.getElementById('successView').style.display = 'block';
   document.getElementById('successName').textContent = name + '，欢迎你！';
+  if (extraMsg) {
+    var p = document.getElementById('successView').querySelectorAll('p');
+    if (p.length >= 2) p[1].textContent = extraMsg;
+  }
 }
 </script>
 </body>
