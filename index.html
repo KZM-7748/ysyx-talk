@@ -166,17 +166,21 @@ footer .f3{color:#6b7280;font-size:14px}
 .reveal{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s ease}
 .reveal.visible{opacity:1;transform:translateY(0)}
 
-/* ===== 顶部通知条 ===== */
-.top-notice{background:linear-gradient(90deg,rgba(45,212,191,.12),rgba(96,165,250,.12));border-bottom:1px solid rgba(45,212,191,.2);padding:10px 24px;text-align:center;font-size:14px;color:#a7f3d0;position:sticky;top:0;z-index:100;backdrop-filter:blur(8px)}
-.top-notice .notice-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#2dd4bf;margin-right:8px;animation:pulse-dot 2s ease-in-out infinite}
-.top-notice a{color:#2dd4bf;text-decoration:none;font-weight:600}
-@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+/* ===== 顶部滚动通知条 ===== */
+.top-notice{background:linear-gradient(90deg,rgba(245,158,11,.15),rgba(244,114,182,.12),rgba(45,212,191,.12));border-bottom:1px solid rgba(251,191,36,.3);padding:10px 0;text-align:center;font-size:15px;font-weight:600;color:#fbbf24;position:sticky;top:0;z-index:100;backdrop-filter:blur(8px);overflow:hidden;white-space:nowrap}
+.marquee-wrap{display:inline-block;overflow:hidden;vertical-align:middle}
+.marquee-text{display:inline-block;padding-left:100%;animation:marquee 18s linear infinite}
+.marquee-text .hl{color:#fff}
+.marquee-text .dot{color:#2dd4bf;margin:0 12px}
+@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-100%)}}
 </style>
 </head>
 <body>
 
 <div class="top-notice">
-  <span class="notice-dot"></span>本界面持续更新中，欢迎常回来看看 · 想报名的同学可在页面下方扫码加入校内交流群
+  <div class="marquee-wrap"><span class="marquee-text">
+    <span class="hl">明天就是宣讲会！</span><span class="dot">·</span>10月17日（周六）9:30—11:30<span class="dot">·</span>计算机工程学院 N5-301会议室<span class="dot">·</span>带上好奇心来听听，现场还有抽奖<span class="dot">·</span>提前扫码加入校内交流群
+  </span></div>
 </div>
 
 <!-- ===== Hero ===== -->
