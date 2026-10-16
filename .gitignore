@@ -1,4 +1,9 @@
 .preview/
 
 sync-debug.log
+sync_test.log
 reset.txt
+reset_test.txt
+names.json
+names_test.json
+*.bak_*

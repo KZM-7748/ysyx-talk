@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>一生一芯 · 现场抽奖</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; background: #0d1117; color: #e6edf3; min-height: 100vh; }
+.topbar { padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #21262d; }
+.topbar h1 { font-size: 18px; color: #3fb950; }
+.topbar .count { font-size: 14px; color: #7d8590; }
+.topbar .count b { color: #e6edf3; }
+.container { max-width: 900px; margin: 0 auto; padding: 24px; }
+
+/* 导入区 */
+.import-section { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 20px; margin-bottom: 24px; }
+.import-section h2 { font-size: 15px; margin-bottom: 12px; color: #e6edf3; }
+.import-section textarea { width: 100%; height: 120px; background: #0d1117; border: 1px solid #30363d; border-radius: 8px; color: #e6edf3; padding: 12px; font-size: 14px; resize: vertical; outline: none; font-family: inherit; }
+.import-section textarea:focus { border-color: #1f6feb; }
+.import-section textarea::placeholder { color: #484f58; }
+.import-actions { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+.btn { padding: 10px 20px; border-radius: 8px; border: 1px solid #30363d; background: #21262d; color: #e6edf3; cursor: pointer; font-size: 14px; }
+.btn:hover { background: #30363d; }
+.btn-primary { background: #238636; border-color: #238636; color: #fff; }
+.btn-primary:hover { background: #2ea043; }
+.btn-danger { border-color: #da3633; color: #f85149; }
+.btn-danger:hover { background: rgba(218,54,51,0.15); }
+.name-preview { margin-top: 12px; font-size: 13px; color: #7d8590; line-height: 1.8; }
+.name-preview b { color: #3fb950; }
+
+/* 抽奖区 */
+.stage { text-align: center; padding: 40px 20px; }
+.rolling-name { font-size: 64px; font-weight: 800; color: #e6edf3; text-shadow: 0 0 40px rgba(63,185,80,0.3); min-height: 90px; display: flex; align-items: center; justify-content: center; margin-bottom: 30px; }
+.draw-btn { width: 200px; height: 200px; border-radius: 50%; border: none; background: radial-gradient(circle at 30% 30%, #3fb950, #238636); color: #fff; font-size: 26px; font-weight: 700; cursor: pointer; box-shadow: 0 0 60px rgba(63,185,80,0.4); transition: transform 0.1s; }
+.draw-btn:hover { transform: scale(1.05); }
+.draw-btn:active { transform: scale(0.95); }
+.draw-btn:disabled { background: #30363d; box-shadow: none; cursor: not-allowed; }
+
+/* 奖品条 */
+.prize-bar { display: flex; justify-content: center; gap: 24px; padding: 16px; flex-wrap: wrap; }
+.prize-item { font-size: 14px; color: #7d8590; }
+.prize-item b { color: #e6edf3; }
+
+/* 中奖记录 */
+.history { max-width: 600px; margin: 20px auto; }
+.history h3 { font-size: 14px; color: #7d8590; margin-bottom: 10px; }
+.history-item { padding: 10px 14px; background: #161b22; border-radius: 8px; margin-bottom: 6px; font-size: 15px; display: flex; justify-content: space-between; }
+.history-item .prize { color: #d29922; font-weight: 600; }
+
+/* 设置面板 */
+.settings { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 16px; margin-bottom: 24px; }
+.settings h3 { font-size: 14px; margin-bottom: 10px; color: #7d8590; }
+.settings-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.settings-row label { font-size: 13px; color: #7d8590; }
+.settings-row input { width: 60px; padding: 6px; background: #0d1117; border: 1px solid #30363d; border-radius: 6px; color: #e6edf3; text-align: center; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <h1>一生一芯 · 现场抽奖</h1>
+  <div class="count" id="countBar">已导入 <b>0</b> 人 · 已抽 <b>0</b> 人</div>
+</div>
+
+<div class="container">
+
+  <!-- 导入区 -->
+  <div class="import-section">
+    <h2>导入名单（粘贴签到收集到的姓名，每行一个，或用逗号分隔）</h2>
+    <textarea id="nameInput" placeholder="张三&#10;李四&#10;王五&#10;或：张三、李四、王五"></textarea>
+    <div class="import-actions">
+      <button class="btn btn-primary" onclick="importNames()">导入名单</button>
+      <button class="btn" onclick="clearNames()">清空名单</button>
+      <button class="btn" onclick="loadSample()">示例</button>
+    </div>
+    <div class="name-preview" id="namePreview">尚未导入名单</div>
+  </div>
+
+  <!-- 设置 -->
+  <div class="settings">
+    <h3>奖品配置（自动随机分配）</h3>
+    <div class="settings-row">
+      <label>雨伞 <input type="number" id="prize1" value="1" min="0"></label>
+      <label>帆布袋 <input type="number" id="prize2" value="3" min="0"></label>
+      <label>钥匙扣 <input type="number" id="prize3" value="5" min="0"></label>
+      <label>贴纸 <input type="number" id="prize4" value="5" min="0"></label>
+      <button class="btn" onclick="updatePrizeBar()">更新</button>
+    </div>
+  </div>
+
+  <!-- 抽奖区 -->
+  <div class="stage">
+    <div class="rolling-name" id="displayName">请先导入名单</div>
+    <div id="prizeReveal" style="font-size:32px;color:#d29922;font-weight:700;margin-bottom:30px;min-height:40px;"></div>
+    <button class="draw-btn" id="drawBtn" onclick="startDraw()" disabled>抽奖</button>
+    <div style="margin-top:20px;">
+      <button class="btn" onclick="resetWinners()" style="font-size:13px;">重置抽奖结果（保留名单）</button>
+    </div>
+  </div>
+
+  <div class="prize-bar" id="prizeBar"></div>
+  <div class="history" id="history"></div>
+
+</div>
+
+<script>
+var namePool = [];
+var winners = [];
+var rolling = false;
+
+function getPrizeConfig() {
+  return [
+    { name: "雨伞", count: parseInt(document.getElementById("prize1").value) || 0 },
+    { name: "帆布袋", count: parseInt(document.getElementById("prize2").value) || 0 },
+    { name: "钥匙扣", count: parseInt(document.getElementById("prize3").value) || 0 },
+    { name: "贴纸", count: parseInt(document.getElementById("prize4").value) || 0 }
+  ];
+}
+
+function importNames() {
+  var raw = document.getElementById("nameInput").value.trim();
+  if (!raw) { alert("请先粘贴名单"); return; }
+  // Split by newline, comma, Chinese comma, space, etc.
+  var names = raw.split(/[\n,，、;；\t]+/).map(function(s) { return s.trim(); }).filter(function(s) { return s.length > 0; });
+  // Deduplicate
+  var seen = {};
+  namePool = [];
+  names.forEach(function(n) {
+    if (!seen[n]) { seen[n] = true; namePool.push(n); }
+  });
+  winners = [];
+  document.getElementById("prizeReveal").textContent = "";
+  updateUI();
+  document.getElementById("displayName").textContent = namePool.length > 0 ? "共 " + namePool.length + " 人，点击抽奖" : "无人可抽";
+}
+
+function clearNames() {
+  namePool = [];
+  winners = [];
+  document.getElementById("nameInput").value = "";
+  document.getElementById("displayName").textContent = "请先导入名单";
+  document.getElementById("prizeReveal").textContent = "";
+  updateUI();
+}
+
+function loadSample() {
+  document.getElementById("nameInput").value = "张三\n李四\n王五\n赵六\n钱七\n孙八\n周九\n吴十";
+  importNames();
+}
+
+function updatePrizeBar() {
+  var config = getPrizeConfig();
+  var html = "";
+  config.forEach(function(p) {
+    var remaining = p.count - winners.filter(function(w) { return w.prize === p.name; }).length;
+    html += '<div class="prize-item">' + p.name + ' <b>' + Math.max(0, remaining) + '</b></div>';
+  });
+  document.getElementById("prizeBar").innerHTML = html;
+}
+
+function updateUI() {
+  var drawn = winners.length;
+  document.getElementById("countBar").innerHTML = "已导入 <b>" + namePool.length + "</b> 人 · 已抽 <b>" + drawn + "</b> 人";
+  updatePrizeBar();
+  // History
+  var h = document.getElementById("history");
+  if (winners.length === 0) { h.innerHTML = ""; }
+  else {
+    var html = "<h3>中奖记录（共 " + winners.length + " 人）</h3>";
+    winners.forEach(function(w, i) {
+      html += '<div class="history-item"><span>' + (i+1) + '. ' + w.name + '</span><span class="prize">' + w.prize + '</span></div>';
+    });
+    h.innerHTML = html;
+  }
+  // Button state
+  var available = namePool.filter(function(n) { return !winners.some(function(w) { return w.name === n; }); });
+  document.getElementById("drawBtn").disabled = available.length === 0 || rolling;
+  // Preview
+  var preview = document.getElementById("namePreview");
+  if (namePool.length > 0) {
+    preview.innerHTML = "已导入 <b>" + namePool.length + "</b> 人：" + namePool.slice(0, 10).join("、") + (namePool.length > 10 ? " ..." : "");
+  } else {
+    preview.textContent = "尚未导入名单";
+  }
+}
+
+function startDraw() {
+  if (rolling) return;
+  var available = namePool.filter(function(n) { return !winners.some(function(w) { return w.name === n; }); });
+  if (available.length === 0) { alert("没有可抽的人了"); return; }
+  rolling = true;
+  document.getElementById("drawBtn").disabled = true;
+  document.getElementById("drawBtn").textContent = "抽取中...";
+
+  var duration = 2500;
+  var start = Date.now();
+  var timer = setInterval(function() {
+    var n = available[Math.floor(Math.random() * available.length)];
+    document.getElementById("displayName").textContent = n;
+    if (Date.now() - start > duration) {
+      clearInterval(timer);
+      var winner = available[Math.floor(Math.random() * available.length)];
+      document.getElementById("displayName").textContent = winner;
+      finishDraw(winner);
+    }
+  }, 80);
+}
+
+function finishDraw(winnerName) {
+  var config = getPrizeConfig();
+  var pool = [];
+  config.forEach(function(p) {
+    var drawn = winners.filter(function(w) { return w.prize === p.name; }).length;
+    for (var i = drawn; i < p.count; i++) pool.push(p.name);
+  });
+  if (pool.length === 0) pool.push("谢谢参与");
+  var prize = pool[Math.floor(Math.random() * pool.length)];
+  winners.push({ name: winnerName, prize: prize });
+  rolling = false;
+  document.getElementById("drawBtn").textContent = "继续抽奖";
+  document.getElementById("prizeReveal").textContent = "获得：" + prize;
+  updateUI();
+}
+
+function resetWinners() {
+  if (!confirm("清空开奖记录？签到名单保留")) return;
+  winners = [];
+  document.getElementById("prizeReveal").textContent = "";
+  document.getElementById("displayName").textContent = "已重置，共 " + namePool.length + " 人";
+  updateUI();
+}
+
+// Init
+updatePrizeBar();
+updateUI();
+</script>
+</body>
+</html>
