@@ -87,7 +87,7 @@ body {
 <body>
 
 <div class="lock-banner" id="lockBanner">
-  另一个窗口已是“抽奖主控”，本页面仅用于观看，不会重复开奖。
+  另一个窗口已是"抽奖主控"，本页面仅用于观看，不会重复开奖。
 </div>
 
 <div class="header">
@@ -105,15 +105,15 @@ body {
 <button class="admin-toggle" onclick="togglePanel()">设置</button>
 <div class="admin-panel" id="adminPanel">
   <h3>抽奖设置</h3>
-  <p class=”note”>奖品固定：雨伞 1、帆布袋 3、钥匙扣 5、贴纸 5（共 14 份）。</p>
-  <p class=”note”>手机扫码签到后，名单约 3 秒内自动出现在本页。请勿在多台设备同时开奖。</p>
-  <div class=”row”>
-    <button class=”btn-primary” onclick=”exportWinners()”>导出中奖名单</button>
-    <button class=”btn-gray” onclick=”closePanel()”>关闭</button>
+  <p class="note">奖品固定：雨伞 1、帆布袋 3、钥匙扣 5、贴纸 5（共 14 份）。</p>
+  <p class="note">手机扫码签到后，名单约 3 秒内自动出现在本页。请勿在多台设备同时开奖。</p>
+  <div class="row">
+    <button class="btn-primary" onclick="exportWinners()">导出中奖名单</button>
+    <button class="btn-gray" onclick="closePanel()">关闭</button>
   </div>
-  <div class=”row”>
-    <button class=”btn-gray” onclick=”resetDraw()”>只清开奖记录</button>
-    <button class=”btn-gray” onclick=”resetAll()”>清空名单+重开</button>
+  <div class="row">
+    <button class="btn-gray" onclick="resetDraw()">只清开奖记录</button>
+    <button class="btn-gray" onclick="resetAll()">清空名单+重开</button>
   </div>
 </div>
 
@@ -337,7 +337,7 @@ function renderAll() {
    抽奖
    ============================================================ */
 function startDraw() {
-  if (!isMaster) { alert('本页面为只读，开奖请在“主控”窗口操作'); return; }
+  if (!isMaster) { alert('本页面为只读，开奖请在"主控"窗口操作'); return; }
   if (rolling) return;
   var dn = drawnNames();
   var available = participants.filter(function (n) { return !dn[n]; });
