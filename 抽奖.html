@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>一生一芯 · 现场抽奖</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+  background: linear-gradient(135deg, #0b0f1a 0%, #1a1f3a 100%);
+  color: #fff;
+  height: 100vh;
+  overflow: hidden;
+  user-select: none;
+}
+.header { text-align: center; padding: 24px 0 8px; }
+.header h1 { font-size: 28px; color: #2dd4bf; letter-spacing: 4px; }
+.header .count { font-size: 14px; color: #6b7280; margin-top: 6px; }
+.stage {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  height: calc(100vh - 100px);
+}
+.rolling-name {
+  font-size: 72px; font-weight: 900; color: #fff;
+  min-height: 90px; display: flex; align-items: center;
+  text-shadow: 0 0 40px rgba(45,212,191,0.5);
+  margin-bottom: 30px;
+}
+.draw-btn {
+  width: 240px; height: 240px; border-radius: 50%;
+  background: linear-gradient(135deg, #2dd4bf 0%, #0d9488 100%);
+  border: none; color: #fff; font-size: 32px; font-weight: 700;
+  cursor: pointer; letter-spacing: 6px;
+  box-shadow: 0 0 80px rgba(45,212,191,0.4);
+  transition: transform 0.2s;
+}
+.draw-btn:hover { transform: scale(1.05); }
+.draw-btn:disabled { background: #374151; box-shadow: none; cursor: not-allowed; }
+.result { text-align: center; animation: pop 0.5s ease; }
+@keyframes pop { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+.result .winner { font-size: 80px; font-weight: 900; color: #fbbf24; text-shadow: 0 0 60px rgba(251,191,36,0.6); }
+.result .prize { font-size: 30px; color: #2dd4bf; margin-top: 16px; }
+.prize-bar {
+  position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 20px; background: rgba(255,255,255,0.05);
+  padding: 10px 24px; border-radius: 40px; font-size: 13px; color: #9ca3af;
+}
+.prize-bar b { color: #2dd4bf; margin-left: 4px; }
+.history {
+  position: fixed; bottom: 60px; left: 16px; font-size: 12px;
+  color: #6b7280; max-width: 280px; max-height: 180px; overflow-y: auto;
+}
+.history b { color: #fbbf24; }
+/* 设置面板 */
+.admin-toggle {
+  position: fixed; top: 16px; right: 16px;
+  background: rgba(255,255,255,0.1); border: 1px solid #374151;
+  color: #9ca3af; padding: 6px 14px; border-radius: 8px;
+  cursor: pointer; font-size: 12px; z-index: 99;
+}
+.admin-panel {
+  position: fixed; top: 50px; right: 16px;
+  background: rgba(17,24,39,0.97); border: 1px solid #374151;
+  border-radius: 12px; padding: 18px; width: 320px; z-index: 100;
+  display: none;
+}
+.admin-panel.show { display: block; }
+.admin-panel h3 { font-size: 15px; color: #2dd4bf; margin-bottom: 10px; }
+.admin-panel label { display: block; font-size: 11px; color: #9ca3af; margin: 8px 0 3px; }
+.admin-panel textarea, .admin-panel input {
+  width: 100%; background: #111827; border: 1px solid #374151;
+  border-radius: 6px; color: #e5e7eb; padding: 6px; font-size: 12px;
+}
+.admin-panel textarea { height: 80px; resize: vertical; }
+.admin-panel .row { display: flex; gap: 8px; margin-top: 10px; }
+.admin-panel button {
+  flex: 1; padding: 8px; background: #2dd4bf; color: #0b0f1a;
+  border: none; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 12px;
+}
+.admin-panel .btn-gray { background: #374151; color: #9ca3af; }
+.refresh-hint {
+  position: fixed; top: 16px; left: 16px; font-size: 12px; color: #4b5563;
+}
+.refresh-hint button {
+  background: none; border: none; color: #2dd4bf; cursor: pointer;
+  text-decoration: underline; font-size: 12px;
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>一生一芯 · 现场抽奖</h1>
+  <div class="count" id="countText">加载中...</div>
+</div>
+
+<button class="admin-toggle" onclick="document.querySelector('.admin-panel').classList.toggle('show')">设置</button>
+<div class="refresh-hint">
+  <button onclick="refreshNames()">刷新名单</button>
+  <span id="lastRefresh"></span>
+</div>
+
+<div class="admin-panel">
+  <h3>抽奖设置</h3>
+  <label>API 端点（留空则用本地名单）</label>
+  <input type="text" id="apiUrl" placeholder="https://...">
+  <label>本地名单（每行一个，用于无后端模式）</label>
+  <textarea id="namesInput" placeholder="张三&#10;李四"></textarea>
+  <label>奖品配置（名称:数量，每行一个）</label>
+  <textarea id="prizesInput">文化衫:5
+雨伞:5
+帆布包:10
+钥匙扣:20
+UV转印贴:30</textarea>
+  <div class="row">
+    <button onclick="applySettings()">应用</button>
+    <button class="btn-gray" onclick="closePanel()">关闭</button>
+  </div>
+</div>
+
+<div class="stage">
+  <div class="rolling-name" id="displayName">点击开始抽奖</div>
+  <div id="resultArea"></div>
+  <button class="draw-btn" id="drawBtn" onclick="startDraw()">抽奖</button>
+</div>
+
+<div class="prize-bar" id="prizeBar"></div>
+<div class="history" id="history"></div>
+
+<script>
+let participants = [];
+let prizes = [];
+let drawn = new Set();
+
+function closePanel() {
+  document.querySelector('.admin-panel').classList.remove('show');
+}
+
+function applySettings() {
+  const apiUrl = document.getElementById('apiUrl').value.trim();
+  if (apiUrl) localStorage.setItem('apiUrl', apiUrl);
+
+  const names = document.getElementById('namesInput').value.trim().split('\n').map(s => s.trim()).filter(Boolean);
+  participants = names;
+
+  const prizeLines = document.getElementById('prizesInput').value.trim().split('\n');
+  prizes = [];
+  prizeLines.forEach(line => {
+    const [name, count] = line.split(':');
+    const n = parseInt(count) || 0;
+    for (let i = 0; i < n; i++) prizes.push(name.trim());
+  });
+  drawn = new Set();
+  document.getElementById('resultArea').innerHTML = '';
+  document.getElementById('history').innerHTML = '';
+  updateCount();
+  updatePrizeBar();
+  closePanel();
+}
+
+function refreshNames() {
+  const apiUrl = localStorage.getItem('apiUrl');
+  if (!apiUrl) {
+    // 无后端：从 localStorage 读取签到页数据
+    const local = JSON.parse(localStorage.getItem('signinNames') || '[]');
+    if (local.length > 0) {
+      participants = local;
+      drawn = new Set();
+      updateCount();
+    }
+    return;
+  }
+  fetch(apiUrl)
+    .then(r => r.json())
+    .then(data => {
+      const names = (data.results || data || []).map(x => x.name || x).filter(Boolean);
+      participants = [...new Set(names)];
+      drawn = new Set();
+      updateCount();
+      const now = new Date().toLocaleTimeString();
+      document.getElementById('lastRefresh').textContent = '更新于 ' + now;
+    })
+    .catch(() => alert('刷新失败'));
+}
+
+function updateCount() {
+  document.getElementById('countText').textContent =
+    `已签到 ${participants.length} 人 · 奖品 ${prizes.length} 份`;
+  document.getElementById('displayName').textContent = participants.length > 0 ? '准备就绪' : '暂无名单';
+}
+
+function updatePrizeBar() {
+  const remaining = {};
+  prizes.forEach(p => remaining[p] = (remaining[p] || 0) + 1);
+  let html = '';
+  for (const [name, count] of Object.entries(remaining)) {
+    html += `<span>${name}<b>${count}</b></span>`;
+  }
+  document.getElementById('prizeBar').innerHTML = html;
+}
+
+function startDraw() {
+  const available = participants.filter(n => !drawn.has(n));
+  if (available.length === 0) { document.getElementById('displayName').textContent = '所有人都抽过了'; return; }
+  if (prizes.length === 0) { document.getElementById('displayName').textContent = '奖品已抽完'; return; }
+  const btn = document.getElementById('drawBtn');
+  btn.disabled = true;
+  document.getElementById('resultArea').innerHTML = '';
+  let count = 0;
+  const timer = setInterval(() => {
+    document.getElementById('displayName').textContent = available[Math.floor(Math.random() * available.length)];
+    if (++count > 25) {
+      clearInterval(timer);
+      const winner = available[Math.floor(Math.random() * available.length)];
+      const prize = prizes.splice(Math.floor(Math.random() * prizes.length), 1)[0];
+      drawn.add(winner);
+      document.getElementById('displayName').textContent = '';
+      document.getElementById('resultArea').innerHTML =
+        `<div class="result"><div class="winner">${winner}</div><div class="prize">获得 ${prize}</div></div>`;
+      document.getElementById('history').innerHTML = `<div><b>${winner}</b> — ${prize}</div>` + document.getElementById('history').innerHTML;
+      updateCount();
+      updatePrizeBar();
+      btn.disabled = false;
+    }
+  }, 60);
+}
+
+// 初始化
+const savedApi = localStorage.getItem('apiUrl');
+if (savedApi) document.getElementById('apiUrl').value = savedApi;
+refreshNames();
+updatePrizeBar();
+</script>
+</body>
+</html>
