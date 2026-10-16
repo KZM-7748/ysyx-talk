@@ -46,31 +46,6 @@ body {
   color: #6b7280; max-width: 280px; max-height: 180px; overflow-y: auto;
 }
 .history b { color: #fbbf24; }
-.admin-toggle {
-  position: fixed; top: 16px; right: 16px;
-  background: rgba(255,255,255,0.1); border: 1px solid #374151;
-  color: #9ca3af; padding: 6px 14px; border-radius: 8px;
-  cursor: pointer; font-size: 12px; z-index: 99;
-}
-.admin-panel {
-  position: fixed; top: 50px; right: 16px;
-  background: rgba(17,24,39,0.97); border: 1px solid #374151;
-  border-radius: 12px; padding: 18px; width: 320px; z-index: 100; display: none;
-}
-.admin-panel.show { display: block; }
-.admin-panel h3 { font-size: 15px; color: #2dd4bf; margin-bottom: 10px; }
-.admin-panel label { display: block; font-size: 11px; color: #9ca3af; margin: 8px 0 3px; }
-.admin-panel textarea, .admin-panel input {
-  width: 100%; background: #111827; border: 1px solid #374151;
-  border-radius: 6px; color: #e5e7eb; padding: 6px; font-size: 12px;
-}
-.admin-panel textarea { height: 80px; resize: vertical; }
-.admin-panel .row { display: flex; gap: 8px; margin-top: 10px; }
-.admin-panel button {
-  flex: 1; padding: 8px; background: #2dd4bf; color: #0b0f1a;
-  border: none; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 12px;
-}
-.admin-panel .btn-gray { background: #374151; color: #9ca3af; }
 .refresh-hint { position: fixed; top: 16px; left: 16px; font-size: 12px; color: #4b5563; }
 .refresh-hint button {
   background: none; border: none; color: #2dd4bf; cursor: pointer;
@@ -86,24 +61,9 @@ body {
   <div class="count" id="countText">加载中...</div>
 </div>
 
-<button class="admin-toggle" onclick="document.querySelector('.admin-panel').classList.toggle('show')">设置</button>
 <div class="refresh-hint">
   <button onclick="refreshNames()">刷新名单</button>
   <span class="auto-refresh" id="autoRefresh">自动刷新已开启</span>
-</div>
-
-<div class="admin-panel">
-  <h3>抽奖设置</h3>
-  <label>奖品配置（名称:数量，每行一个）</label>
-  <textarea id="prizesInput">文化衫:5
-雨伞:5
-帆布包:10
-钥匙扣:20
-UV转印贴:30</textarea>
-  <div class="row">
-    <button onclick="applySettings()">应用奖品</button>
-    <button class="btn-gray" onclick="closePanel()">关闭</button>
-  </div>
 </div>
 
 <div class="stage">
@@ -116,38 +76,40 @@ UV转印贴:30</textarea>
 <div class="history" id="history"></div>
 
 <script>
-const API_URL = "https://webhook.site/6e2a71b3-5582-4315-be38-390f9f541ddb";
-const REQUESTS_URL = "https://webhook.site/token/6e2a71b3-5582-4315-be38-390f9f541ddb/requests?sorting=newest&per_page=200";
+const WEBHOOK_TOKEN = "6e2a71b3-5582-4315-be38-390f9f541ddb";
+const REQUESTS_URL = "https://webhook.site/token/" + WEBHOOK_TOKEN + "/requests?sorting=newest&per_page=200";
+const CORS_PROXY = "https://api.allorigins.win/raw?url=";
 
 let participants = [];
 let prizes = [];
 let drawn = new Set();
 
-function closePanel() { document.querySelector('.admin-panel').classList.remove('show'); }
-
-function applySettings() {
-  const prizeLines = document.getElementById('prizesInput').value.trim().split('\n');
+// 默认奖品：雨伞1、帆布袋3、钥匙扣5、贴纸5
+function initPrizes() {
+  const defaults = [["雨伞",1],["帆布袋",3],["钥匙扣",5],["贴纸",5]];
   prizes = [];
-  prizeLines.forEach(line => {
-    const [name, count] = line.split(':');
-    const n = parseInt(count) || 0;
-    for (let i = 0; i < n; i++) prizes.push(name.trim());
+  defaults.forEach(([name, count]) => {
+    for (let i = 0; i < count; i++) prizes.push(name);
   });
-  updateCount();
-  updatePrizeBar();
-  closePanel();
+  // 打乱奖品顺序
+  prizes = prizes.sort(() => Math.random() - 0.5);
 }
 
 function refreshNames() {
-  fetch(REQUESTS_URL)
+  fetch(CORS_PROXY + encodeURIComponent(REQUESTS_URL))
     .then(r => r.json())
     .then(data => {
       const names = (data.data || [])
         .map(item => {
+          // 签到页通过 ?name=xxx 传递，读 query 字段
+          if (item.query && item.query.name) return item.query.name;
+          // 兼容 POST JSON 方式
           try { return JSON.parse(item.content).name; } catch(e) { return null; }
         })
         .filter(Boolean);
       participants = [...new Set(names)];
+      // 打乱签到名单顺序
+      participants = participants.sort(() => Math.random() - 0.5);
       updateCount();
     })
     .catch(() => {});
@@ -174,7 +136,10 @@ function updatePrizeBar() {
 
 function startDraw() {
   const available = participants.filter(n => !drawn.has(n));
-  if (available.length === 0) { document.getElementById('displayName').textContent = participants.length > 0 ? '所有人都抽过了' : '等待签到...'; return; }
+  if (available.length === 0) {
+    document.getElementById('displayName').textContent = participants.length > 0 ? '所有人都抽过了' : '等待签到...';
+    return;
+  }
   if (prizes.length === 0) { document.getElementById('displayName').textContent = '奖品已抽完'; return; }
   const btn = document.getElementById('drawBtn');
   btn.disabled = true;
@@ -185,7 +150,7 @@ function startDraw() {
     if (++count > 25) {
       clearInterval(timer);
       const winner = available[Math.floor(Math.random() * available.length)];
-      const prize = prizes.splice(Math.floor(Math.random() * prizes.length), 1)[0];
+      const prize = prizes.pop(); // 从尾部取，奖品已打乱
       drawn.add(winner);
       document.getElementById('displayName').textContent = '';
       document.getElementById('resultArea').innerHTML =
@@ -195,17 +160,6 @@ function startDraw() {
       btn.disabled = false;
     }
   }, 60);
-}
-
-// 初始化：默认奖品
-function initPrizes() {
-  const defaults = [["文化衫",5],["雨伞",5],["帆布包",10],["钥匙扣",20],["UV转印贴",30]];
-  prizes = [];
-  defaults.forEach(([name, count]) => {
-    for (let i = 0; i < count; i++) prizes.push(name);
-  });
-  // 同步到设置面板
-  document.getElementById('prizesInput').value = defaults.map(([n,c]) => n+":"+c).join('\n');
 }
 
 // 初始化
