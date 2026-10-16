@@ -25,6 +25,7 @@ button.primary { background: #238636; border-color: #238636; color: #fff; }
 <div class="controls">
   <button class="primary" onclick="copyNames()">复制名单</button>
   <button onclick="refresh()">刷新</button>
+  <button style="border-color:#da3633;color:#f85149" onclick="clearAll()">清空名单</button>
 </div>
 <div id="nameList">加载中...</div>
 <textarea id="rawText" readonly placeholder="复制上面的名单后，粘贴到本地抽奖页"></textarea>
@@ -67,6 +68,21 @@ function copyNames() {
     document.execCommand("copy");
     alert("已复制");
   }
+}
+
+function clearAll() {
+  if (!confirm("确定清空所有签到名单？正式开场前点这个")) return;
+  fetch(NPOINT_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ names: [], winners: [] })
+  }).then(function() {
+    names = [];
+    render();
+    alert("已清空");
+  }).catch(function(e) {
+    alert("清空失败: " + e.message);
+  });
 }
 
 refresh();
