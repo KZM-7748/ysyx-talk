@@ -96,23 +96,28 @@ function initPrizes() {
 }
 
 function refreshNames() {
-  fetch(CORS_PROXY + encodeURIComponent(REQUESTS_URL))
+  // 先试直连，不行再走CORS代理
+  fetch(REQUESTS_URL)
     .then(r => r.json())
-    .then(data => {
-      const names = (data.data || [])
-        .map(item => {
-          // 签到页通过 ?name=xxx 传递，读 query 字段
-          if (item.query && item.query.name) return item.query.name;
-          // 兼容 POST JSON 方式
-          try { return JSON.parse(item.content).name; } catch(e) { return null; }
-        })
-        .filter(Boolean);
-      participants = [...new Set(names)];
-      // 打乱签到名单顺序
-      participants = participants.sort(() => Math.random() - 0.5);
-      updateCount();
+    .then(data => parseNames(data))
+    .catch(() => {
+      fetch(CORS_PROXY + encodeURIComponent(REQUESTS_URL))
+        .then(r => r.json())
+        .then(data => parseNames(data))
+        .catch(() => {});
+    });
+}
+
+function parseNames(data) {
+  const names = (data.data || [])
+    .map(item => {
+      if (item.query && item.query.name) return item.query.name;
+      try { return JSON.parse(item.content).name; } catch(e) { return null; }
     })
-    .catch(() => {});
+    .filter(Boolean);
+  participants = [...new Set(names)];
+  participants = participants.sort(() => Math.random() - 0.5);
+  updateCount();
 }
 
 function updateCount() {
