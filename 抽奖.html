@@ -197,10 +197,22 @@ function startDraw() {
   }, 60);
 }
 
+// 初始化：默认奖品
+function initPrizes() {
+  const defaults = [["文化衫",5],["雨伞",5],["帆布包",10],["钥匙扣",20],["UV转印贴",30]];
+  prizes = [];
+  defaults.forEach(([name, count]) => {
+    for (let i = 0; i < count; i++) prizes.push(name);
+  });
+  // 同步到设置面板
+  document.getElementById('prizesInput').value = defaults.map(([n,c]) => n+":"+c).join('\n');
+}
+
 // 初始化
-applySettings();
+initPrizes();
+updatePrizeBar();
+updateCount();
 refreshNames();
-// 每5秒自动刷新名单
 setInterval(refreshNames, 5000);
 </script>
 </body>
