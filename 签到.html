@@ -10,87 +10,35 @@ body {
   font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
   background: linear-gradient(135deg, #0b0f1a 0%, #1a1f3a 100%);
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  color: #fff;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 20px; color: #fff;
 }
-.logo {
-  font-size: 18px;
-  color: #2dd4bf;
-  letter-spacing: 4px;
-  margin-bottom: 12px;
-}
-h1 {
-  font-size: 28px;
-  font-weight: 700;
-  margin-bottom: 8px;
-  text-align: center;
-}
-.subtitle {
-  font-size: 14px;
-  color: #6b7280;
-  margin-bottom: 40px;
-  text-align: center;
-}
-.input-wrap {
-  width: 100%;
-  max-width: 360px;
-}
+.logo { font-size: 18px; color: #2dd4bf; letter-spacing: 4px; margin-bottom: 12px; }
+h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; text-align: center; }
+.subtitle { font-size: 14px; color: #6b7280; margin-bottom: 40px; text-align: center; }
+.input-wrap { width: 100%; max-width: 360px; }
 input {
-  width: 100%;
-  padding: 16px 20px;
-  font-size: 18px;
-  border: 2px solid #374151;
-  border-radius: 12px;
-  background: rgba(255,255,255,0.08);
-  color: #fff;
-  text-align: center;
-  outline: none;
-  transition: border-color 0.2s;
+  width: 100%; padding: 16px 20px; font-size: 18px;
+  border: 2px solid #374151; border-radius: 12px;
+  background: rgba(255,255,255,0.08); color: #fff;
+  text-align: center; outline: none; transition: border-color 0.2s;
 }
 input:focus { border-color: #2dd4bf; }
 input::placeholder { color: #6b7280; }
 button {
-  width: 100%;
-  margin-top: 16px;
-  padding: 16px;
-  font-size: 18px;
-  font-weight: 700;
-  border: none;
-  border-radius: 12px;
+  width: 100%; margin-top: 16px; padding: 16px;
+  font-size: 18px; font-weight: 700; border: none; border-radius: 12px;
   background: linear-gradient(135deg, #2dd4bf 0%, #0d9488 100%);
-  color: #fff;
-  cursor: pointer;
-  letter-spacing: 4px;
+  color: #fff; cursor: pointer; letter-spacing: 4px;
 }
 button:active { transform: scale(0.98); }
 button:disabled { opacity: 0.5; }
-.success {
-  display: none;
-  text-align: center;
-}
-.success .icon {
-  font-size: 60px;
-  margin-bottom: 16px;
-}
-.success h2 {
-  font-size: 22px;
-  color: #2dd4bf;
-  margin-bottom: 8px;
-}
-.success p {
-  font-size: 14px;
-  color: #9ca3af;
-}
-.footer {
-  position: fixed;
-  bottom: 20px;
-  font-size: 12px;
-  color: #4b5563;
-}
+.success { display: none; text-align: center; }
+.success .icon { font-size: 60px; margin-bottom: 16px; }
+.success h2 { font-size: 22px; color: #2dd4bf; margin-bottom: 8px; }
+.success p { font-size: 14px; color: #9ca3af; }
+.footer { position: fixed; bottom: 20px; font-size: 12px; color: #4b5563; }
 </style>
 </head>
 <body>
@@ -112,13 +60,7 @@ button:disabled { opacity: 0.5; }
 <div class="footer">计算机工程学院 · 一生一芯校园宣讲会</div>
 
 <script>
-// ====== 配置：API 端点 ======
-// 使用 LeanCloud 或其他 BaaS 的 REST API
-// 格式: https://[你的域名]/1.1/classes/Attendance
-// 方法: POST
-// Body: {"name": "张三"}
-// Draw 页面 GET 同一个端点读取所有记录
-const API_URL = localStorage.getItem('apiUrl') || '';
+const API_URL = "https://webhook.site/6e2a71b3-5582-4315-be38-390f9f541ddb";
 
 function submitName() {
   const name = document.getElementById('nameInput').value.trim();
@@ -127,22 +69,13 @@ function submitName() {
   btn.disabled = true;
   btn.textContent = '提交中...';
 
-  if (!API_URL) {
-    // 无后端模式：存入 localStorage，主持端手动同步
-    let names = JSON.parse(localStorage.getItem('signinNames') || '[]');
-    if (!names.includes(name)) names.push(name);
-    localStorage.setItem('signinNames', JSON.stringify(names));
-    showSuccess(name);
-    return;
-  }
-
   fetch(API_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ name: name })
-  }).then(r => r.json()).then(() => {
+  }).then(() => {
     showSuccess(name);
-  }).catch(err => {
+  }).catch(() => {
     alert('提交失败，请重试');
     btn.disabled = false;
     btn.textContent = '签到并参与抽奖';
